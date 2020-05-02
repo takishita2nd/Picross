@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Picross.ui;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,8 @@ namespace Picross
         [STAThread]
         static void Main(string[] args)
         {
+            PicrossUI picross = new PicrossUI();
+            picross.Run();
         }
     }
 }
