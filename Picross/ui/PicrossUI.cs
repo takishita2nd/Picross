@@ -8,8 +8,7 @@ namespace Picross.ui
 {
     class PicrossUI
     {
-        private const int setPositionX = 200;
-        private const int setPositionY = 200;
+        private List<List<DrawSquare>> drawSquares = new List<List<DrawSquare>>();
 
         public PicrossUI()
         {
@@ -29,13 +28,14 @@ namespace Picross.ui
 
             for(int row = 0; row <10; row++)
             {
+                List<DrawSquare> rowList = new List<DrawSquare>();
                 for(int col = 0; col <10; col++)
                 {
-                    var square = new asd.TextureObject2D();
-                    square.Texture = asd.Engine.Graphics.CreateTexture2D("square.png");
-                    square.Position = new asd.Vector2DF(row * 32 + setPositionX, col * 32 + setPositionY);
-                    asd.Engine.AddObject2D(square);
+                    var square = new DrawSquare(row, col);
+                    asd.Engine.AddObject2D(square.getBackTexture());
+                    rowList.Add(square);
                 }
+                drawSquares.Add(rowList);
             }
 
             while (asd.Engine.DoEvents())
