@@ -26,7 +26,13 @@ namespace Picross.ui
             bgRect.DrawingArea = new asd.RectF(0, 0, 1000, 800);
             background.Shape = bgRect;
 
-            for(int row = 0; row <10; row++)
+            List<Button> buttons = new List<Button>();
+            var sizeButton = new SizeButton();
+            asd.Engine.AddObject2D(sizeButton.getBackTexture());
+            asd.Engine.AddObject2D(sizeButton.getTextObject());
+            buttons.Add(sizeButton);
+
+            for (int row = 0; row <10; row++)
             {
                 List<DrawSquare> rowList = new List<DrawSquare>();
                 for(int col = 0; col <10; col++)
@@ -40,6 +46,22 @@ namespace Picross.ui
 
             while (asd.Engine.DoEvents())
             {
+                asd.Vector2DF pos = asd.Engine.Mouse.Position;
+                foreach (Button button in buttons)
+                {
+                    button.updateTexture(pos);
+                }
+
+                if (asd.Engine.Mouse.LeftButton.ButtonState == asd.ButtonState.Push)
+                {
+                    foreach (Button button in buttons)
+                    {
+                        if (button.isClick(pos))
+                        {
+                            button.onClick();
+                        }
+                    }
+                }
                 asd.Engine.Update();
             }
             asd.Engine.Terminate();
