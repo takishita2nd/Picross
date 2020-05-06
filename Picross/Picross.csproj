@@ -75,13 +75,11 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource.cs" />
-    <Compile Include="ui\Button.cs" />
-    <Compile Include="ui\Controll.cs" />
-    <Compile Include="ui\dialog\Dialog.cs" />
+    <Compile Include="ui\parts\Button.cs" />
+    <Compile Include="ui\parts\Dialog.cs" />
     <Compile Include="ui\DrawSquare.cs" />
     <Compile Include="ui\ObjectBase.cs" />
     <Compile Include="ui\PicrossUI.cs" />
-    <Compile Include="ui\SizeButton.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

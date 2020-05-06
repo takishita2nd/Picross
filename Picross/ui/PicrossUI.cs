@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Picross.ui.parts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,6 @@ namespace Picross.ui
 
         public PicrossUI()
         {
-
         }
 
         public void Run()
@@ -27,7 +27,8 @@ namespace Picross.ui
             background.Shape = bgRect;
 
             List<Button> buttons = new List<Button>();
-            var sizeButton = new SizeButton();
+            var sizeButton = new Button(10, 10, "サイズ変更");
+            sizeButton.Show();
             asd.Engine.AddObject2D(sizeButton.getBackTexture());
             asd.Engine.AddObject2D(sizeButton.getTextObject());
             buttons.Add(sizeButton);
@@ -44,21 +45,48 @@ namespace Picross.ui
                 drawSquares.Add(rowList);
             }
 
+            Dialog dialog = new Dialog();
+            dialog.SetEngine();
+            dialog.SetAction(() =>
+            {
+                dialog.Hide();
+            });
+            sizeButton.SetAction(() => {
+                dialog.Show();
+            });
+
             while (asd.Engine.DoEvents())
             {
                 asd.Vector2DF pos = asd.Engine.Mouse.Position;
-                foreach (Button button in buttons)
+                if(!dialog.IsShow())
                 {
-                    button.updateTexture(pos);
+                    foreach (Button button in buttons)
+                    {
+                        button.UpdateTexture(pos);
+                    }
+                }
+                else
+                {
+                    dialog.UpdateTexture(pos);
                 }
 
                 if (asd.Engine.Mouse.LeftButton.ButtonState == asd.ButtonState.Push)
                 {
-                    foreach (Button button in buttons)
+                    if (!dialog.IsShow())
                     {
-                        if (button.isClick(pos))
+                        foreach (Button button in buttons)
                         {
-                            button.onClick();
+                            if (button.isClick(pos))
+                            {
+                                button.OnClick();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (dialog.IsClick(pos))
+                        {
+                            dialog.OnClick(pos);
                         }
                     }
                 }
