@@ -14,6 +14,7 @@ namespace Picross.ui
         protected asd.TextObject2D _valueText;
         protected int width;
         protected int height;
+        private Action _action = null;
 
         public asd.TextureObject2D getBackTexture()
         {

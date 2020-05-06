@@ -11,6 +11,10 @@ namespace Picross.ui.parts
         private asd.TextureObject2D _texture;
         private bool _isShow;
         private Button _button = null;
+        private TextBox _rowText = null;
+        private TextBox _colText = null;
+        private Label _label1 = null;
+        private Label _label2 = null;
         private int _x = 300;
         private int _y = 300;
         private int _width = 400;
@@ -20,7 +24,9 @@ namespace Picross.ui.parts
         public Dialog()
         {
             _isShow = false;
-            _button = new Button(436, 450, "確定");
+
+            // 確定ボタン
+            _button = new Button(436, 400, "確定");
             _button.SetFontOffset(46, 4);
             _button.SetAction(() =>
             {
@@ -29,6 +35,13 @@ namespace Picross.ui.parts
                     _action.Invoke();
                 }
             });
+            // ラベル
+            _label1 = new Label(320, 330, "↓");
+            _label2 = new Label(490, 330, "→");
+            // Row入力エリア
+            _rowText = new TextBox(350, 330, "0");
+            // Col入力エリア
+            _colText = new TextBox(520, 330, "0");
 
             _texture = new asd.TextureObject2D();
             _texture.Position = new asd.Vector2DF(_x, _y);
@@ -37,6 +50,12 @@ namespace Picross.ui.parts
         public void SetEngine()
         {
             asd.Engine.AddObject2D(_texture);
+            asd.Engine.AddObject2D(_label1.getTextObject());
+            asd.Engine.AddObject2D(_label2.getTextObject());
+            asd.Engine.AddObject2D(_rowText.getBackTexture());
+            asd.Engine.AddObject2D(_rowText.getTextObject());
+            asd.Engine.AddObject2D(_colText.getBackTexture());
+            asd.Engine.AddObject2D(_colText.getTextObject());
             asd.Engine.AddObject2D(_button.getBackTexture());
             asd.Engine.AddObject2D(_button.getTextObject());
         }
@@ -50,6 +69,10 @@ namespace Picross.ui.parts
         {
             _isShow = true;
             _texture.Texture = Resource.getDialogTexture();
+            _label1.Show();
+            _label2.Show();
+            _rowText.Show();
+            _colText.Show();
             _button.Show();
         }
 
@@ -57,6 +80,10 @@ namespace Picross.ui.parts
         {
             _isShow = false;
             _texture.Texture = null;
+            _label1.Hide();
+            _label2.Hide();
+            _rowText.Hide();
+            _colText.Hide();
             _button.Hide();
         }
 
@@ -67,6 +94,8 @@ namespace Picross.ui.parts
 
         public void UpdateTexture(asd.Vector2DF pos)
         {
+            _rowText.UpdateTexture(pos);
+            _colText.UpdateTexture(pos);
             _button.UpdateTexture(pos);
         }
 

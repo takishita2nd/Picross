@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Picross.ui.parts
 {
-    class Button : ObjectBase
+    class TextBox : ObjectBase
     {
         private string _text;
         private int fontOffsetX = 9;
@@ -15,7 +15,7 @@ namespace Picross.ui.parts
         private Action _action = null;
         private bool _isShow = false;
 
-        public Button(int x, int y, string text)
+        public TextBox(int x, int y, string text)
         {
             width = 128;
             height = 32;
@@ -44,18 +44,18 @@ namespace Picross.ui.parts
             if (pos.X > _x && pos.X < _x + width
                 && pos.Y > _y && pos.Y < _y + height)
             {
-                _backTexture.Texture = Resource.getButtonTexture();
+                _backTexture.Texture = Resource.getSelectedTextTexture();
             }
             else
             {
-                _backTexture.Texture = null;
+                _backTexture.Texture = Resource.getTextTexture();
             }
         }
 
         public void Show()
         {
             _isShow = true;
-            _backTexture.Texture = Resource.getButtonTexture();
+            _backTexture.Texture = Resource.getTextTexture();
             _valueText.Font = Resource.getFont();
         }
 
