@@ -13,7 +13,11 @@ namespace Picross
         private static asd.Texture2D _textTexture = null;
         private static asd.Texture2D _SelectedTextTexture = null;
         private static asd.Texture2D _dialogTexture = null;
+        private static asd.Texture2D _paletteTexture = null;
+        private static asd.Texture2D _paletteSquareTexture = null;
         private static asd.Font _font = null;
+        private static asd.Font _fonRedt = null;
+        private static asd.Font _fontPalette = null;
 
         public static asd.Texture2D GetPicrossTexture()
         {
@@ -60,6 +64,24 @@ namespace Picross
             return _dialogTexture;
         }
 
+        public static asd.Texture2D getPaletteTexture()
+        {
+            if (_paletteTexture == null)
+            {
+                _paletteTexture = asd.Engine.Graphics.CreateTexture2D("palette.png");
+            }
+            return _paletteTexture;
+        }
+
+        public static asd.Texture2D getPaletteSquareTexture()
+        {
+            if (_paletteSquareTexture == null)
+            {
+                _paletteSquareTexture = asd.Engine.Graphics.CreateTexture2D("paletteSquare.png");
+            }
+            return _paletteSquareTexture;
+        }
+
         public static asd.Font getFont()
         {
             if (_font == null)
@@ -67,6 +89,24 @@ namespace Picross
                 _font = asd.Engine.Graphics.CreateFont("font.aff");
             }
             return _font;
+        }
+
+        public static asd.Font getFontRed()
+        {
+            if (_fonRedt == null)
+            {
+                _fonRedt = asd.Engine.Graphics.CreateFont("fontRed.aff");
+            }
+            return _fonRedt;
+        }
+
+        public static asd.Font getPaletteFont()
+        {
+            if (_fontPalette == null)
+            {
+                _fontPalette = asd.Engine.Graphics.CreateFont("paletteFont.aff");
+            }
+            return _fontPalette;
         }
     }
 }

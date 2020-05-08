@@ -15,6 +15,7 @@ namespace Picross.ui.parts
         private TextBox _colText = null;
         private Label _label1 = null;
         private Label _label2 = null;
+        private Palette _palette = null;
         private int _x = 300;
         private int _y = 300;
         private int _width = 400;
@@ -24,6 +25,8 @@ namespace Picross.ui.parts
         public Dialog()
         {
             _isShow = false;
+            _palette = new Palette();
+            _palette.Hide();
 
             // 確定ボタン
             _button = new Button(436, 400, "確定");
@@ -58,6 +61,7 @@ namespace Picross.ui.parts
             asd.Engine.AddObject2D(_colText.getTextObject());
             asd.Engine.AddObject2D(_button.getBackTexture());
             asd.Engine.AddObject2D(_button.getTextObject());
+            _palette.SetEngine();
         }
 
         public void SetAction(Action action)
@@ -94,9 +98,16 @@ namespace Picross.ui.parts
 
         public void UpdateTexture(asd.Vector2DF pos)
         {
-            _rowText.UpdateTexture(pos);
-            _colText.UpdateTexture(pos);
-            _button.UpdateTexture(pos);
+            if (_palette.IsShow())
+            {
+                _palette.UpdateTexture(pos);
+            }
+            else
+            {
+                _rowText.UpdateTexture(pos);
+                _colText.UpdateTexture(pos);
+                _button.UpdateTexture(pos);
+            }
         }
 
         public bool IsClick(asd.Vector2DF pos)
@@ -115,9 +126,31 @@ namespace Picross.ui.parts
 
         public void OnClick(asd.Vector2DF pos)
         {
-            if (_button.isClick(pos))
+            if (_palette.IsShow() == false)
             {
-                _button.OnClick();
+                if (_rowText.isClick(pos))
+                {
+                    _palette.Show(pos);
+                }
+                if (_colText.isClick(pos))
+                {
+                    _palette.Show(pos);
+                }
+                if (_button.isClick(pos))
+                {
+                    _button.OnClick();
+                }
+            }
+            else
+            {
+                if (_palette.IsClick(pos))
+                {
+
+                }
+                else
+                {
+                    _palette.Hide();
+                }
             }
         }
     }

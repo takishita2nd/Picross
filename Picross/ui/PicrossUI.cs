@@ -84,10 +84,7 @@ namespace Picross.ui
                     }
                     else
                     {
-                        if (dialog.IsClick(pos))
-                        {
-                            dialog.OnClick(pos);
-                        }
+                        dialog.OnClick(pos);
                     }
                 }
                 asd.Engine.Update();
