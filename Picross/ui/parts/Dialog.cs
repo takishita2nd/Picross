@@ -21,6 +21,10 @@ namespace Picross.ui.parts
         private int _width = 400;
         private int _height = 200;
         private Action _action = null;
+        private string _rowValue = "10";
+        private string _colValue = "10";
+        private TextBox _selectedTextBox = null;
+        private string _selectedValue = string.Empty;
 
         public Dialog()
         {
@@ -42,9 +46,9 @@ namespace Picross.ui.parts
             _label1 = new Label(320, 330, "↓");
             _label2 = new Label(490, 330, "→");
             // Row入力エリア
-            _rowText = new TextBox(350, 330, "0");
+            _rowText = new TextBox(350, 330, _rowValue);
             // Col入力エリア
-            _colText = new TextBox(520, 330, "0");
+            _colText = new TextBox(520, 330, _colValue);
 
             _texture = new asd.TextureObject2D();
             _texture.Position = new asd.Vector2DF(_x, _y);
@@ -130,10 +134,14 @@ namespace Picross.ui.parts
             {
                 if (_rowText.isClick(pos))
                 {
+                    _selectedTextBox = _rowText;
+                    _selectedValue = _rowValue;
                     _palette.Show(pos);
                 }
                 if (_colText.isClick(pos))
                 {
+                    _selectedTextBox = _colText;
+                    _selectedValue = _colValue;
                     _palette.Show(pos);
                 }
                 if (_button.isClick(pos))
@@ -145,13 +153,68 @@ namespace Picross.ui.parts
             {
                 if (_palette.IsClick(pos))
                 {
-
+                    string v = _palette.GetClickValue(pos);
+                    _selectedValue = updateTextValue(_selectedTextBox, _selectedValue, v);
+                    if (_selectedTextBox.Equals(_rowText))
+                    {
+                        _rowValue = _selectedValue;
+                    }
+                    else
+                    {
+                        _colValue = _selectedValue;
+                    }
                 }
                 else
                 {
                     _palette.Hide();
+                    _selectedTextBox = null;
+                    _selectedValue = string.Empty;
                 }
             }
+        }
+
+        private string updateTextValue(TextBox textBox, string value, string v)
+        {
+            string text = string.Empty;
+            switch (v)
+            {
+                case Palette.CODE.ZERO:
+                    if(value.Length == 0)
+                    {
+                        text = string.Empty;
+                    }
+                    else if(value.Length < 2)
+                    {
+                        text = value + v;
+
+                    }
+                    else
+                    {
+                        text = value;
+                    }
+                    break;
+                case Palette.CODE.BS:
+                    if(value.Length != 0)
+                    {
+                        text = value.Remove(value.Length - 1);
+                    }
+                    break;
+                case Palette.CODE.CLR:
+                    text = string.Empty;
+                    break;
+                default:
+                    if(value.Length < 2)
+                    {
+                        text = value + v;
+                    }
+                    else
+                    {
+                        text = value;
+                    }
+                    break;
+            }
+            textBox.SetText(text);
+            return text;
         }
     }
 }

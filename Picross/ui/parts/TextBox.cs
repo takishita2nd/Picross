@@ -76,6 +76,12 @@ namespace Picross.ui.parts
             this.enable = enable;
         }
 
+        public void SetText(string text)
+        {
+            _text = text;
+            _valueText.Text = _text;
+        }
+
         public virtual void OnClick()
         {
             if (enable)

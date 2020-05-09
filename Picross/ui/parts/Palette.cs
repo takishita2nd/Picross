@@ -10,6 +10,7 @@ namespace Picross.ui.parts
     {
         public class CODE
         {
+            public const string ZERO = "0";
             public const string BS = "BS";
             public const string CLR = "CLR";
         }
@@ -19,8 +20,9 @@ namespace Picross.ui.parts
         private const int height = 256;
         private asd.TextureObject2D _texture;
         SquareObject[,] paletteSquareObjects = new SquareObject[3, 3];
-        SquareObject paletteBSSquareObject = new SquareObject(-1, 0, "←");
-        SquareObject paletteCRSquareObject = new SquareObject(-1, 1, "Ｃ");
+        SquareObject paletteZeroSquareObject = new SquareObject(-1, 0, "0");
+        SquareObject paletteBSSquareObject = new SquareObject(-1, 1, "←");
+        SquareObject paletteCRSquareObject = new SquareObject(-1, 2, "Ｃ");
         private bool _isShow = false;
 
         public Palette()
@@ -50,6 +52,8 @@ namespace Picross.ui.parts
                     asd.Engine.AddObject2D(paletteSquareObjects[row, col].getTextObject());
                 }
             }
+            asd.Engine.AddObject2D(paletteZeroSquareObject.getBackTexture());
+            asd.Engine.AddObject2D(paletteZeroSquareObject.getTextObject());
             asd.Engine.AddObject2D(paletteBSSquareObject.getBackTexture());
             asd.Engine.AddObject2D(paletteBSSquareObject.getTextObject());
             asd.Engine.AddObject2D(paletteCRSquareObject.getBackTexture());
@@ -69,6 +73,8 @@ namespace Picross.ui.parts
                     paletteSquareObjects[row, col].Show();
                 }
             }
+            paletteZeroSquareObject.SetPosition(pos);
+            paletteZeroSquareObject.Show();
             paletteBSSquareObject.SetPosition(pos);
             paletteBSSquareObject.Show();
             paletteCRSquareObject.SetPosition(pos);
@@ -85,6 +91,7 @@ namespace Picross.ui.parts
                     paletteSquareObjects[row, col].Hide();
                 }
             }
+            paletteZeroSquareObject.Hide();
             paletteBSSquareObject.Hide();
             paletteCRSquareObject.Hide();
             _texture.Texture = null;
@@ -118,6 +125,7 @@ namespace Picross.ui.parts
                     paletteSquareObjects[row, col].UpdateTexture(pos);
                 }
             }
+            paletteZeroSquareObject.UpdateTexture(pos);
             paletteBSSquareObject.UpdateTexture(pos);
             paletteCRSquareObject.UpdateTexture(pos);
         }
@@ -134,11 +142,15 @@ namespace Picross.ui.parts
                     }
                 }
             }
+            if (paletteZeroSquareObject.isClick(pos))
+            {
+                return CODE.ZERO;
+            }
             if (paletteBSSquareObject.isClick(pos))
             {
                 return CODE.BS;
             }
-            if (paletteBSSquareObject.isClick(pos))
+            if (paletteCRSquareObject.isClick(pos))
             {
                 return CODE.CLR;
             }
