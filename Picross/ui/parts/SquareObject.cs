@@ -41,6 +41,12 @@ namespace Picross.ui.parts
 
         }
 
+        public void SetPriority(int priority)
+        {
+            _backTexture.DrawingPriority = priority;
+            _valueText.DrawingPriority = priority;
+        }
+
         public void SetPosition(asd.Vector2DF pos)
         {
             _x = _col * width + (int)pos.X;

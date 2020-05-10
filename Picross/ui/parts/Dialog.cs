@@ -25,6 +25,7 @@ namespace Picross.ui.parts
         private string _colValue = "10";
         private TextBox _selectedTextBox = null;
         private string _selectedValue = string.Empty;
+        private const int priority = 10000;
 
         public Dialog()
         {
@@ -35,6 +36,7 @@ namespace Picross.ui.parts
             // 確定ボタン
             _button = new Button(436, 400, "確定");
             _button.SetFontOffset(46, 4);
+            _button.SetPriority(priority + 1);
             _button.SetAction(() =>
             {
                 if(_action != null)
@@ -44,14 +46,19 @@ namespace Picross.ui.parts
             });
             // ラベル
             _label1 = new Label(320, 330, "↓");
+            _label1.SetPriority(priority + 1);
             _label2 = new Label(490, 330, "→");
+            _label2.SetPriority(priority + 1);
             // Row入力エリア
             _rowText = new TextBox(350, 330, _rowValue);
+            _rowText.SetPriority(priority + 1);
             // Col入力エリア
             _colText = new TextBox(520, 330, _colValue);
+            _colText.SetPriority(priority + 1);
 
             _texture = new asd.TextureObject2D();
             _texture.Position = new asd.Vector2DF(_x, _y);
+            _texture.DrawingPriority = priority;
         }
 
         public void SetEngine()
@@ -71,6 +78,16 @@ namespace Picross.ui.parts
         public void SetAction(Action action)
         {
             _action = action;
+        }
+
+        public int GetRowValue()
+        {
+            return int.Parse(_rowValue);
+        }
+
+        public int GetColValue()
+        {
+            return int.Parse(_colValue);
         }
 
         public void Show()

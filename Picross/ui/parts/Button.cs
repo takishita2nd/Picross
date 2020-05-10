@@ -32,6 +32,12 @@ namespace Picross.ui.parts
             _valueText.Position = new asd.Vector2DF(_x + fontOffsetX, _y + fontOffsetY);
         }
 
+        public void SetPriority(int priority)
+        {
+            _backTexture.DrawingPriority = priority;
+            _valueText.DrawingPriority = priority;
+        }
+
         public void SetFontOffset(int x, int y)
         {
             fontOffsetX = x;

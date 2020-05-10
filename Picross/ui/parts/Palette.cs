@@ -24,21 +24,27 @@ namespace Picross.ui.parts
         SquareObject paletteBSSquareObject = new SquareObject(-1, 1, "←");
         SquareObject paletteCRSquareObject = new SquareObject(-1, 2, "Ｃ");
         private bool _isShow = false;
+        private const int priority = 11000;
 
         public Palette()
         {
             _texture = new asd.TextureObject2D();
+            _texture.DrawingPriority = priority;
             int value = 1;
             for (int row = 0; row < 3; row++)
             {
                 for (int col = 0; col < 3; col++)
                 {
                     paletteSquareObjects[row, col] = new SquareObject(row, col, value.ToString());
+                    paletteSquareObjects[row, col].SetPriority(priority + 1);
                     value++;
                 }
             }
             paletteBSSquareObject.SetFontOffset(14, 9);
+            paletteBSSquareObject.SetPriority(priority + 1);
             paletteCRSquareObject.SetFontOffset(10, 9);
+            paletteCRSquareObject.SetPriority(priority + 1);
+            paletteZeroSquareObject.SetPriority(priority + 1);
         }
 
         public void SetEngine()

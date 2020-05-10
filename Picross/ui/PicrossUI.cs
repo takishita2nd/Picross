@@ -50,6 +50,54 @@ namespace Picross.ui
             dialog.SetAction(() =>
             {
                 dialog.Hide();
+                int row = dialog.GetRowValue();
+                int col = dialog.GetColValue();
+                while(row != drawSquares.Count)
+                {
+                    if(drawSquares.Count > row)
+                    {
+                        var rowList = drawSquares[drawSquares.Count - 1];
+                        foreach(var c in rowList)
+                        {
+                            asd.Engine.RemoveObject2D(c.getBackTexture());
+                        }
+                        drawSquares.RemoveAt(drawSquares.Count - 1);
+                    }
+                    else
+                    {
+                        List<DrawSquare> rowList = new List<DrawSquare>();
+                        for (int c = 0; c < drawSquares[0].Count; c++)
+                        {
+                            var square = new DrawSquare(drawSquares.Count, c);
+                            asd.Engine.AddObject2D(square.getBackTexture());
+                            rowList.Add(square);
+                        }
+                        drawSquares.Add(rowList);
+                    }
+                }
+                while(col != drawSquares[0].Count)
+                {
+                    if(drawSquares[0].Count > col)
+                    {
+                        foreach(var r in drawSquares)
+                        {
+                            asd.Engine.RemoveObject2D(r[r.Count - 1].getBackTexture());
+                            r.RemoveAt(r.Count - 1);
+                        }
+                    }
+                    else
+                    {
+                        int rowindex = 0;
+                        int colindex = drawSquares[0].Count;
+                        foreach (var r in drawSquares)
+                        {
+                            var square = new DrawSquare(rowindex, colindex);
+                            asd.Engine.AddObject2D(square.getBackTexture());
+                            r.Add(square);
+                            rowindex++;
+                        }
+                    }
+                }
             });
             sizeButton.SetAction(() => {
                 dialog.Show();

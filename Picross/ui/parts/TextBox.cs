@@ -66,6 +66,12 @@ namespace Picross.ui.parts
             _valueText.Font = null;
         }
 
+        public void SetPriority(int priority)
+        {
+            _backTexture.DrawingPriority = priority;
+            _valueText.DrawingPriority = priority;
+        }
+
         public void SetAction(Action action)
         {
             _action = action;
