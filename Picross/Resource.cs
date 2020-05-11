@@ -9,6 +9,7 @@ namespace Picross
     class Resource
     {
         private static asd.Texture2D _picrossTexture = null;
+        private static asd.Texture2D _selectedNumberTexture = null;
         private static asd.Texture2D _buttonTexture = null;
         private static asd.Texture2D _textTexture = null;
         private static asd.Texture2D _SelectedTextTexture = null;
@@ -26,6 +27,15 @@ namespace Picross
                 _picrossTexture = asd.Engine.Graphics.CreateTexture2D("square.png");
             }
             return _picrossTexture;
+        }
+
+        public static asd.Texture2D GetSelectedNumberTexture()
+        {
+            if (_selectedNumberTexture == null)
+            {
+                _selectedNumberTexture = asd.Engine.Graphics.CreateTexture2D("selectSquare.png");
+            }
+            return _selectedNumberTexture;
         }
 
         public static asd.Texture2D getButtonTexture()
