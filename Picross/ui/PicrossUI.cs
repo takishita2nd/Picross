@@ -80,100 +80,26 @@ namespace Picross.ui
                 {
                     if(drawSquares.Count > row)
                     {
-                        {
-                            // マスの削除
-                            var rowList = drawSquares[drawSquares.Count - 1];
-                            foreach (var c in rowList)
-                            {
-                                asd.Engine.RemoveObject2D(c.getBackTexture());
-                            }
-                            drawSquares.RemoveAt(drawSquares.Count - 1);
-                        }
-
-                        {
-                            // 数字のマスの削除
-                            var rowList = rowNumberSquare[rowNumberSquare.Count - 1];
-                            foreach (var s in rowList)
-                            {
-                                asd.Engine.RemoveObject2D(s.getBackTexture());
-                                asd.Engine.RemoveObject2D(s.getTextObject());
-                            }
-                            rowNumberSquare.RemoveAt(rowNumberSquare.Count - 1);
-                        }
+                        deleteRow();
+                        deleteRowNumber();
                     }
                     else
                     {
-                        {
-                            // マスの追加
-                            List<DrawSquare> rowList = new List<DrawSquare>();
-                            for (int c = 0; c < drawSquares[0].Count; c++)
-                            {
-                                var square = new DrawSquare(drawSquares.Count, c);
-                                asd.Engine.AddObject2D(square.getBackTexture());
-                                rowList.Add(square);
-                            }
-                            drawSquares.Add(rowList);
-                        }
-
-                        {
-                            // 数字のマス追加
-                            var square = new NumberSquare(rowNumberSquare.Count, -1);
-                            asd.Engine.AddObject2D(square.getBackTexture());
-                            asd.Engine.AddObject2D(square.getTextObject());
-                            List<NumberSquare> list = new List<NumberSquare>();
-                            list.Add(square);
-                            rowNumberSquare.Add(list);
-                        }
+                        addRow();
+                        addRowNumber();
                     }
                 }
                 while(col != drawSquares[0].Count)
                 {
                     if(drawSquares[0].Count > col)
                     {
-                        {
-                            // マスの削除
-                            foreach (var r in drawSquares)
-                            {
-                                asd.Engine.RemoveObject2D(r[r.Count - 1].getBackTexture());
-                                r.RemoveAt(r.Count - 1);
-                            }
-                        }
-
-                        {
-                            // 数字のマスの削除
-                            var colList = colNumberSquare[colNumberSquare.Count - 1];
-                            foreach (var s in colList)
-                            {
-                                asd.Engine.RemoveObject2D(s.getBackTexture());
-                                asd.Engine.RemoveObject2D(s.getTextObject());
-                            }
-                            colNumberSquare.RemoveAt(colNumberSquare.Count - 1);
-                        }
+                        deleteCol();
+                        deleteColNumber();
                     }
                     else
                     {
-                        {
-                            // マスの追加
-                            int rowindex = 0;
-                            int colindex = drawSquares[0].Count;
-                            foreach (var r in drawSquares)
-                            {
-                                var square = new DrawSquare(rowindex, colindex);
-                                asd.Engine.AddObject2D(square.getBackTexture());
-                                r.Add(square);
-                                rowindex++;
-                            }
-                        }
-
-                        {
-                            // 数字のマス追加
-                            var square = new NumberSquare(-1, colNumberSquare.Count);
-                            asd.Engine.AddObject2D(square.getBackTexture());
-                            asd.Engine.AddObject2D(square.getTextObject());
-                            List<NumberSquare> list = new List<NumberSquare>();
-                            list.Add(square);
-                            colNumberSquare.Add(list);
-                        }
+                        addCol();
+                        addColNumber();
                     }
                 }
             });
@@ -230,6 +156,99 @@ namespace Picross.ui
                 asd.Engine.Update();
             }
             asd.Engine.Terminate();
+        }
+
+        private void deleteRow()
+        {
+            // マスの削除
+            var rowList = drawSquares[drawSquares.Count - 1];
+            foreach (var c in rowList)
+            {
+                asd.Engine.RemoveObject2D(c.getBackTexture());
+            }
+            drawSquares.RemoveAt(drawSquares.Count - 1);
+        }
+
+        private void addRow()
+        {
+            List<DrawSquare> rowList = new List<DrawSquare>();
+            for (int c = 0; c < drawSquares[0].Count; c++)
+            {
+                var square = new DrawSquare(drawSquares.Count, c);
+                asd.Engine.AddObject2D(square.getBackTexture());
+                rowList.Add(square);
+            }
+            drawSquares.Add(rowList);
+        }
+
+        private void deleteCol()
+        {
+            // マスの削除
+            foreach (var r in drawSquares)
+            {
+                asd.Engine.RemoveObject2D(r[r.Count - 1].getBackTexture());
+                r.RemoveAt(r.Count - 1);
+            }
+        }
+
+        private void addCol()
+        {
+            // マスの追加
+            int rowindex = 0;
+            int colindex = drawSquares[0].Count;
+            foreach (var r in drawSquares)
+            {
+                var square = new DrawSquare(rowindex, colindex);
+                asd.Engine.AddObject2D(square.getBackTexture());
+                r.Add(square);
+                rowindex++;
+            }
+        }
+
+        private void deleteRowNumber()
+        {
+            // 数字のマスの削除
+            var rowList = rowNumberSquare[rowNumberSquare.Count - 1];
+            foreach (var s in rowList)
+            {
+                asd.Engine.RemoveObject2D(s.getBackTexture());
+                asd.Engine.RemoveObject2D(s.getTextObject());
+            }
+            rowNumberSquare.RemoveAt(rowNumberSquare.Count - 1);
+        }
+
+        private void addRowNumber()
+        {
+            // 数字のマス追加
+            var square = new NumberSquare(rowNumberSquare.Count, -1);
+            asd.Engine.AddObject2D(square.getBackTexture());
+            asd.Engine.AddObject2D(square.getTextObject());
+            List<NumberSquare> list = new List<NumberSquare>();
+            list.Add(square);
+            rowNumberSquare.Add(list);
+        }
+
+        private void deleteColNumber()
+        {
+            // 数字のマスの削除
+            var colList = colNumberSquare[colNumberSquare.Count - 1];
+            foreach (var s in colList)
+            {
+                asd.Engine.RemoveObject2D(s.getBackTexture());
+                asd.Engine.RemoveObject2D(s.getTextObject());
+            }
+            colNumberSquare.RemoveAt(colNumberSquare.Count - 1);
+        }
+
+        private void addColNumber()
+        {
+            // 数字のマス追加
+            var square = new NumberSquare(-1, colNumberSquare.Count);
+            asd.Engine.AddObject2D(square.getBackTexture());
+            asd.Engine.AddObject2D(square.getTextObject());
+            List<NumberSquare> list = new List<NumberSquare>();
+            list.Add(square);
+            colNumberSquare.Add(list);
         }
     }
 }
