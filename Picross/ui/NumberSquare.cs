@@ -12,8 +12,8 @@ namespace Picross.ui
         protected int _col;
         protected const int setPositionX = 200;
         protected const int setPositionY = 200;
-        protected const int fontOffsetX = 19;
-        protected const int fontOffsetY = 9;
+        protected const int fontOffsetX = 6;
+        protected const int fontOffsetY = 6;
         private string _value;
 
         public NumberSquare(int row, int col)
@@ -54,7 +54,12 @@ namespace Picross.ui
             }
         }
 
-        public int getValue()
+        public string GetStringValue()
+        {
+            return _value;
+        }
+
+        public int GetValue()
         {
             return int.Parse(_value);
         }

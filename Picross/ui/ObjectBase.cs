@@ -26,7 +26,7 @@ namespace Picross.ui
             return _valueText;
         }
 
-        public bool isClick(asd.Vector2DF pos)
+        public bool IsClick(asd.Vector2DF pos)
         {
             if (pos.X > _x && pos.X < _x + width
                 && pos.Y > _y && pos.Y < _y + height)

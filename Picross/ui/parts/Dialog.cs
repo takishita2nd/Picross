@@ -149,19 +149,19 @@ namespace Picross.ui.parts
         {
             if (_palette.IsShow() == false)
             {
-                if (_rowText.isClick(pos))
+                if (_rowText.IsClick(pos))
                 {
                     _selectedTextBox = _rowText;
                     _selectedValue = _rowValue;
                     _palette.Show(pos);
                 }
-                if (_colText.isClick(pos))
+                if (_colText.IsClick(pos))
                 {
                     _selectedTextBox = _colText;
                     _selectedValue = _colValue;
                     _palette.Show(pos);
                 }
-                if (_button.isClick(pos))
+                if (_button.IsClick(pos))
                 {
                     _button.OnClick();
                 }

@@ -12,6 +12,9 @@ namespace Picross.ui
         private List<List<DrawSquare>> drawSquares = new List<List<DrawSquare>>();
         private List<List<NumberSquare>> rowNumberSquare = new List<List<NumberSquare>>();
         private List<List<NumberSquare>> colNumberSquare = new List<List<NumberSquare>>();
+        private NumberSquare selectedNumberSquare = null;
+        private int selectedRowIndex;
+        private int selectedColIndex;
 
         public PicrossUI()
         {
@@ -37,7 +40,7 @@ namespace Picross.ui
             buttons.Add(sizeButton);
 
             // 数字の入力するマス
-            for(int row = 0; row < 10; row++)
+            for (int row = 0; row < 10; row++)
             {
                 NumberSquare square = new NumberSquare(row, -1);
                 asd.Engine.AddObject2D(square.getBackTexture());
@@ -60,7 +63,7 @@ namespace Picross.ui
             for (int row = 0; row < 10; row++)
             {
                 List<DrawSquare> rowList = new List<DrawSquare>();
-                for(int col = 0; col < 10; col++)
+                for (int col = 0; col < 10; col++)
                 {
                     var square = new DrawSquare(row, col);
                     asd.Engine.AddObject2D(square.getBackTexture());
@@ -69,6 +72,7 @@ namespace Picross.ui
                 drawSquares.Add(rowList);
             }
 
+            // サイズ変更ダイアログ
             Dialog dialog = new Dialog();
             dialog.SetEngine();
             dialog.SetAction(() =>
@@ -76,9 +80,9 @@ namespace Picross.ui
                 dialog.Hide();
                 int row = dialog.GetRowValue();
                 int col = dialog.GetColValue();
-                while(row != drawSquares.Count)
+                while (row != drawSquares.Count)
                 {
-                    if(drawSquares.Count > row)
+                    if (drawSquares.Count > row)
                     {
                         deleteRow();
                         deleteRowNumber();
@@ -89,9 +93,9 @@ namespace Picross.ui
                         addRowNumber();
                     }
                 }
-                while(col != drawSquares[0].Count)
+                while (col != drawSquares[0].Count)
                 {
-                    if(drawSquares[0].Count > col)
+                    if (drawSquares[0].Count > col)
                     {
                         deleteCol();
                         deleteColNumber();
@@ -103,32 +107,47 @@ namespace Picross.ui
                     }
                 }
             });
-            sizeButton.SetAction(() => {
+
+            // パレット
+            Palette palette = new Palette();
+            palette.SetEngine();
+            palette.Hide();
+
+            // サイズ変更ボタン
+            sizeButton.SetAction(() =>
+            {
                 dialog.Show();
             });
 
             while (asd.Engine.DoEvents())
             {
                 asd.Vector2DF pos = asd.Engine.Mouse.Position;
-                if(!dialog.IsShow())
+                if (!dialog.IsShow())
                 {
-                    foreach (var rowList in rowNumberSquare)
+                    if (!palette.IsShow())
                     {
-                        foreach (var s in rowList)
+                        foreach (var rowList in rowNumberSquare)
                         {
-                            s.UpdateTexture(pos);
+                            foreach (var s in rowList)
+                            {
+                                s.UpdateTexture(pos);
+                            }
+                        }
+                        foreach (var colList in colNumberSquare)
+                        {
+                            foreach (var s in colList)
+                            {
+                                s.UpdateTexture(pos);
+                            }
+                        }
+                        foreach (Button button in buttons)
+                        {
+                            button.UpdateTexture(pos);
                         }
                     }
-                    foreach (var colList in colNumberSquare)
+                    else
                     {
-                        foreach (var s in colList)
-                        {
-                            s.UpdateTexture(pos);
-                        }
-                    }
-                    foreach (Button button in buttons)
-                    {
-                        button.UpdateTexture(pos);
+                        palette.UpdateTexture(pos);
                     }
                 }
                 else
@@ -140,11 +159,82 @@ namespace Picross.ui
                 {
                     if (!dialog.IsShow())
                     {
-                        foreach (Button button in buttons)
+                        if (!palette.IsShow())
                         {
-                            if (button.isClick(pos))
+                            int rowIndex;
+                            int colIndex;
+                            rowIndex = 0;
+                            foreach (var rowList in rowNumberSquare)
                             {
-                                button.OnClick();
+                                colIndex = -1;
+                                foreach (var s in rowList)
+                                {
+                                    if (s.IsClick(pos))
+                                    {
+                                        selectedNumberSquare = s;
+                                        selectedRowIndex = rowIndex;
+                                        selectedColIndex = colIndex;
+                                        palette.Show(pos);
+                                    }
+                                    colIndex--;
+                                }
+                                rowIndex++;
+                            }
+                            colIndex = 0;
+                            foreach (var colList in colNumberSquare)
+                            {
+                                rowIndex = -1;
+                                foreach (var s in colList)
+                                {
+                                    if (s.IsClick(pos))
+                                    {
+                                        selectedNumberSquare = s;
+                                        selectedRowIndex = rowIndex;
+                                        selectedColIndex = colIndex;
+                                        palette.Show(pos);
+                                    }
+                                    rowIndex--;
+                                }
+                                colIndex++;
+                            }
+                            foreach (Button button in buttons)
+                            {
+                                if (button.IsClick(pos))
+                                {
+                                    button.OnClick();
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (palette.IsClick(pos))
+                            {
+                                string v = palette.GetClickValue(pos);
+                                updateTextValue(selectedNumberSquare, v);
+                            }
+                            else
+                            {
+                                palette.Hide();
+                                if(selectedNumberSquare != null)
+                                {
+                                    if(selectedNumberSquare.GetStringValue() != string.Empty)
+                                    {
+                                        if (selectedRowIndex >= 0)
+                                        {
+                                            var square = new NumberSquare(selectedRowIndex, selectedColIndex - 1);
+                                            asd.Engine.AddObject2D(square.getBackTexture());
+                                            asd.Engine.AddObject2D(square.getTextObject());
+                                            rowNumberSquare[selectedRowIndex].Add(square);
+                                        }
+                                        else if (selectedColIndex >= 0)
+                                        {
+                                            var square = new NumberSquare(selectedRowIndex - 1, selectedColIndex);
+                                            asd.Engine.AddObject2D(square.getBackTexture());
+                                            asd.Engine.AddObject2D(square.getTextObject());
+                                            colNumberSquare[selectedColIndex].Add(square);
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -250,5 +340,52 @@ namespace Picross.ui
             list.Add(square);
             colNumberSquare.Add(list);
         }
+
+        private string updateTextValue(NumberSquare square, string v)
+        {
+            string value = square.GetStringValue();
+            string text = string.Empty;
+            switch (v)
+            {
+                case Palette.CODE.ZERO:
+                    if (value.Length == 0)
+                    {
+                        text = string.Empty;
+                    }
+                    else if (value.Length < 2)
+                    {
+                        text = value + v;
+
+                    }
+                    else
+                    {
+                        text = value;
+                    }
+                    break;
+                case Palette.CODE.BS:
+                    if (value.Length != 0)
+                    {
+                        text = value.Remove(value.Length - 1);
+                    }
+                    break;
+                case Palette.CODE.CLR:
+                    text = string.Empty;
+                    break;
+                default:
+                    if (value.Length < 2)
+                    {
+                        text = value + v;
+                    }
+                    else
+                    {
+                        text = value;
+                    }
+                    break;
+            }
+            square.SetValue(text);
+            return text;
+
+        }
     }
 }
+

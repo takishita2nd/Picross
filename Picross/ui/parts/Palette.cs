@@ -142,21 +142,21 @@ namespace Picross.ui.parts
             {
                 for (int col = 0; col < 3; col++)
                 {
-                    if (paletteSquareObjects[row, col].isClick(pos) == true)
+                    if (paletteSquareObjects[row, col].IsClick(pos) == true)
                     {
                         return paletteSquareObjects[row, col].GetValue();
                     }
                 }
             }
-            if (paletteZeroSquareObject.isClick(pos))
+            if (paletteZeroSquareObject.IsClick(pos))
             {
                 return CODE.ZERO;
             }
-            if (paletteBSSquareObject.isClick(pos))
+            if (paletteBSSquareObject.IsClick(pos))
             {
                 return CODE.BS;
             }
-            if (paletteCRSquareObject.isClick(pos))
+            if (paletteCRSquareObject.IsClick(pos))
             {
                 return CODE.CLR;
             }
