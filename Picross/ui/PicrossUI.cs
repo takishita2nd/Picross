@@ -22,27 +22,20 @@ namespace Picross.ui
 
         public void Run()
         {
-            asd.Engine.Initialize("ピクロス解析ツール", 1000, 800, new asd.EngineOption());
+            asd.Engine.Initialize("ピクロス解析ツール", 1800, 1000, new asd.EngineOption());
 
             // 下地
             var background = new asd.GeometryObject2D();
             asd.Engine.AddObject2D(background);
             var bgRect = new asd.RectangleShape();
-            bgRect.DrawingArea = new asd.RectF(0, 0, 1000, 800);
+            bgRect.DrawingArea = new asd.RectF(0, 0, 1800, 1000);
             background.Shape = bgRect;
-
-            // ボタン
-            List<Button> buttons = new List<Button>();
-            var sizeButton = new Button(10, 10, "サイズ変更");
-            sizeButton.Show();
-            asd.Engine.AddObject2D(sizeButton.getBackTexture());
-            asd.Engine.AddObject2D(sizeButton.getTextObject());
-            buttons.Add(sizeButton);
 
             // 数字の入力するマス
             for (int row = 0; row < 10; row++)
             {
                 NumberSquare square = new NumberSquare(row, -1);
+                square.SetValue("0");
                 asd.Engine.AddObject2D(square.getBackTexture());
                 asd.Engine.AddObject2D(square.getTextObject());
                 List<NumberSquare> rowList = new List<NumberSquare>();
@@ -52,6 +45,7 @@ namespace Picross.ui
             for (int col = 0; col < 10; col++)
             {
                 NumberSquare square = new NumberSquare(-1, col);
+                square.SetValue("0");
                 asd.Engine.AddObject2D(square.getBackTexture());
                 asd.Engine.AddObject2D(square.getTextObject());
                 List<NumberSquare> colList = new List<NumberSquare>();
@@ -114,9 +108,47 @@ namespace Picross.ui
             palette.Hide();
 
             // サイズ変更ボタン
+            List<Button> buttons = new List<Button>();
+            var sizeButton = new Button(10, 10, "サイズ変更");
+            sizeButton.Show();
+            asd.Engine.AddObject2D(sizeButton.getBackTexture());
+            asd.Engine.AddObject2D(sizeButton.getTextObject());
+            buttons.Add(sizeButton);
             sizeButton.SetAction(() =>
             {
                 dialog.Show();
+            });
+
+            // 解析ボタン
+            var anlyzeButton = new Button(10, 50, "解析");
+            anlyzeButton.Show();
+            asd.Engine.AddObject2D(anlyzeButton.getBackTexture());
+            asd.Engine.AddObject2D(anlyzeButton.getTextObject());
+            buttons.Add(anlyzeButton);
+            anlyzeButton.SetAction(() =>
+            {
+            });
+
+            // セーブボタン
+            var saveButton = new Button(10, 90, "セーブ");
+            saveButton.Show();
+            asd.Engine.AddObject2D(saveButton.getBackTexture());
+            asd.Engine.AddObject2D(saveButton.getTextObject());
+            buttons.Add(saveButton);
+            saveButton.SetAction(() =>
+            {
+                FileAccess.Save(rowNumberSquare, colNumberSquare);
+            });
+
+            // ロードボタン
+            var loadButton = new Button(10, 130, "ロード");
+            loadButton.Show();
+            asd.Engine.AddObject2D(loadButton.getBackTexture());
+            asd.Engine.AddObject2D(loadButton.getTextObject());
+            buttons.Add(loadButton);
+            loadButton.SetAction(() =>
+            {
+                FileAccess.Load(ref rowNumberSquare, ref colNumberSquare);
             });
 
             while (asd.Engine.DoEvents())
@@ -234,6 +266,11 @@ namespace Picross.ui
                                             colNumberSquare[selectedColIndex].Add(square);
                                         }
                                     }
+                                    else
+                                    {
+                                        selectedNumberSquare.SetValue("0");
+                                    }
+                                    selectedNumberSquare = null;
                                 }
                             }
                         }
@@ -343,7 +380,11 @@ namespace Picross.ui
 
         private string updateTextValue(NumberSquare square, string v)
         {
-            string value = square.GetStringValue();
+            string value = string.Empty;
+            if(square.GetValue() != 0)
+            {
+                value = square.GetStringValue();
+            }
             string text = string.Empty;
             switch (v)
             {

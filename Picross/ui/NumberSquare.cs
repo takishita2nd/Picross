@@ -61,6 +61,10 @@ namespace Picross.ui
 
         public int GetValue()
         {
+            if(_value == string.Empty)
+            {
+                return 0;
+            }
             return int.Parse(_value);
         }
     }
