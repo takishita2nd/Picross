@@ -26,5 +26,10 @@ namespace Picross.ui
             _backTexture.Texture = Resource.GetPicrossTexture();
             _backTexture.Position = new asd.Vector2DF(_x, _y);
         }
+
+        public void Paint()
+        {
+            _backTexture.Texture = Resource.GetPaintedPicrossTexture();
+        }
     }
 }

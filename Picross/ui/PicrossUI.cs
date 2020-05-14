@@ -1,4 +1,5 @@
 ﻿using Picross.ui.parts;
+using Picross.logic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -127,6 +128,18 @@ namespace Picross.ui
             buttons.Add(anlyzeButton);
             anlyzeButton.SetAction(() =>
             {
+                PicrossAnalyze picross = new PicrossAnalyze(rowNumberSquare, colNumberSquare);
+                bool[,] ret = picross.Run();
+                for(int row = 0; row < rowNumberSquare.Count; row++)
+                {
+                    for(int col = 0; col < colNumberSquare.Count; col++)
+                    {
+                        if(ret[row,col] == true)
+                        {
+                            drawSquares[row][col].Paint();
+                        }
+                    }
+                }
             });
 
             // セーブボタン
