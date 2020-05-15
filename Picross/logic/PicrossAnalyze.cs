@@ -9,8 +9,8 @@ namespace Picross.logic
 {
     class PicrossAnalyze
     {
-        private List<List<int>> rowNumbers;
-        private List<List<int>> colNumbers;
+        private List<AnalyzeListData> rowNumbers;
+        private List<AnalyzeListData> colNumbers;
         private BitmapData[,] _bitmapData;
 
         public PicrossAnalyze(List<List<NumberSquare>> rowNumberSquares, List<List<NumberSquare>> colNumberSquares)
@@ -24,29 +24,29 @@ namespace Picross.logic
                 }
             }
 
-            rowNumbers = new List<List<int>>();
+            rowNumbers = new List<AnalyzeListData>();
             foreach(var rowList in rowNumberSquares)
             {
-                List<int> list = new List<int>();
+                AnalyzeListData list = new AnalyzeListData();
                 foreach(var s in rowList)
                 {
                     if(s.GetValue() != 0)
                     {
-                        list.Add(s.GetValue());
+                        list.AnalyzeDatas.Add(new AnalyzeData(s.GetValue()));
                     }
                 }
                 rowNumbers.Add(list);
             }
 
-            colNumbers = new List<List<int>>();
+            colNumbers = new List<AnalyzeListData>();
             foreach (var colList in colNumberSquares)
             {
-                List<int> list = new List<int>();
+                AnalyzeListData list = new AnalyzeListData();
                 foreach (var s in colList)
                 {
                     if (s.GetValue() != 0)
                     {
-                        list.Add(s.GetValue());
+                        list.AnalyzeDatas.Add(new AnalyzeData(s.GetValue()));
                     }
                 }
                 colNumbers.Add(list);
@@ -68,6 +68,11 @@ namespace Picross.logic
             pattern1Col();
         }
 
+        private void pattern2()
+        {
+
+        }
+
         /**
          * Rowに対して解析パターン１を適用
          */
@@ -77,19 +82,19 @@ namespace Picross.logic
             foreach (var rowlist in rowNumbers)
             {
                 int total = 0;
-                foreach (var v in rowlist)
+                foreach (var v in rowlist.AnalyzeDatas)
                 {
-                    total += v;
+                    total += v.Value;
                 }
-                total += rowlist.Count - 1;
+                total += rowlist.AnalyzeDatas.Count - 1;
                 if (total == colNumbers.Count)
                 {
                     // 塗れるマス確定
                     // リストを反転コピー
                     List<int> revRowList = new List<int>();
-                    foreach (var v in rowlist)
+                    foreach (var v in rowlist.AnalyzeDatas)
                     {
-                        revRowList.Add(v);
+                        revRowList.Add(v.Value);
                     }
                     revRowList.Reverse();
 
@@ -122,19 +127,19 @@ namespace Picross.logic
             foreach (var collist in colNumbers)
             {
                 int total = 0;
-                foreach (var v in collist)
+                foreach (var v in collist.AnalyzeDatas)
                 {
-                    total += v;
+                    total += v.Value;
                 }
-                total += collist.Count - 1;
+                total += collist.AnalyzeDatas.Count - 1;
                 if (total == colNumbers.Count)
                 {
                     // 塗れるマス確定
                     // リストを反転コピー
                     List<int> revColList = new List<int>();
-                    foreach (var v in collist)
+                    foreach (var v in collist.AnalyzeDatas)
                     {
-                        revColList.Add(v);
+                        revColList.Add(v.Value);
                     }
                     revColList.Reverse();
 
@@ -156,6 +161,11 @@ namespace Picross.logic
                 }
                 col++;
             }
+        }
+
+        private void pattern2Row()
+        {
+
         }
     }
 }
