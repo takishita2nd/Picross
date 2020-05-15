@@ -31,5 +31,10 @@ namespace Picross.ui
         {
             _backTexture.Texture = Resource.GetPaintedPicrossTexture();
         }
+
+        public void Mask()
+        {
+            _backTexture.Texture = Resource.GetMaskedPicrossTexture();
+        }
     }
 }

@@ -129,14 +129,18 @@ namespace Picross.ui
             anlyzeButton.SetAction(() =>
             {
                 PicrossAnalyze picross = new PicrossAnalyze(rowNumberSquare, colNumberSquare);
-                bool[,] ret = picross.Run();
+                var ret = picross.Run();
                 for(int row = 0; row < rowNumberSquare.Count; row++)
                 {
                     for(int col = 0; col < colNumberSquare.Count; col++)
                     {
-                        if(ret[row,col] == true)
+                        if(ret[row,col].IsPainted())
                         {
                             drawSquares[row][col].Paint();
+                        }
+                        else if (ret[row, col].IsMasked())
+                        {
+                            drawSquares[row][col].Mask();
                         }
                     }
                 }

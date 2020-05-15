@@ -13,14 +13,14 @@ namespace Picross.logic
         // 塗るで確定
         private bool _isPaint;
         // 塗らないで確定
-        private bool _isFilter;
+        private bool _isMask;
 
         public BitmapData(int row, int col)
         {
             Row = row;
             Col = col;
             _isPaint = false;
-            _isFilter = false;
+            _isMask = false;
         }
 
         public bool IsPainted()
@@ -28,14 +28,14 @@ namespace Picross.logic
             return _isPaint;
         }
 
-        public bool IsFilted()
+        public bool IsMasked()
         {
-            return _isFilter;
+            return _isMask;
         }
 
         public bool IsValid()
         {
-            if(_isPaint | _isFilter)
+            if(_isPaint | _isMask)
             {
                 return true;
             }
@@ -43,6 +43,26 @@ namespace Picross.logic
             {
                 return false;
             }
+        }
+
+        public bool Paint()
+        {
+            if(_isMask)
+            {
+                return false;
+            }
+            _isPaint = true;
+            return true;
+        }
+
+        public bool Mask()
+        {
+            if (_isPaint)
+            {
+                return false;
+            }
+            _isMask = true;
+            return true;
         }
     }
 }

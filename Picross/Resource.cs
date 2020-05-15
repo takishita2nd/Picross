@@ -10,6 +10,7 @@ namespace Picross
     {
         private static asd.Texture2D _picrossTexture = null;
         private static asd.Texture2D _paintedpicrossTexture = null;
+        private static asd.Texture2D _maskedpicrossTexture = null;
         private static asd.Texture2D _selectedNumberTexture = null;
         private static asd.Texture2D _buttonTexture = null;
         private static asd.Texture2D _textTexture = null;
@@ -37,6 +38,15 @@ namespace Picross
                 _paintedpicrossTexture = asd.Engine.Graphics.CreateTexture2D("paintsquare.png");
             }
             return _paintedpicrossTexture;
+        }
+
+        public static asd.Texture2D GetMaskedPicrossTexture()
+        {
+            if (_maskedpicrossTexture == null)
+            {
+                _maskedpicrossTexture = asd.Engine.Graphics.CreateTexture2D("masksquare.png");
+            }
+            return _maskedpicrossTexture;
         }
 
         public static asd.Texture2D GetSelectedNumberTexture()
