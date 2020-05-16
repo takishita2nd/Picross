@@ -22,5 +22,9 @@ namespace Picross.logic
             return _analyzed;
         }
 
+        public void Analyzed()
+        {
+            _analyzed = true;
+        }
     }
 }
