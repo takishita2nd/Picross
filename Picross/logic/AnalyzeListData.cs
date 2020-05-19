@@ -24,6 +24,10 @@ namespace Picross.logic
 
         public void Analyzed()
         {
+            foreach(var data in AnalyzeDatas)
+            {
+                data.Analyzed();
+            }
             _analyzed = true;
         }
     }
