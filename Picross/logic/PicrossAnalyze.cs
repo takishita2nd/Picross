@@ -62,6 +62,7 @@ namespace Picross.logic
             {
                 pattern2();
                 pattern3();
+                pattern4();
             }
             return _bitmapData;
         }
