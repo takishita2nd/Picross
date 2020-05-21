@@ -30,5 +30,21 @@ namespace Picross.logic
             }
             _analyzed = true;
         }
+
+        public void CheckAnalyze()
+        {
+            int count = 0;
+            foreach(var data in AnalyzeDatas)
+            {
+                if (data.IsAnalyzed())
+                {
+                    count++;
+                }
+            }
+            if(count == AnalyzeDatas.Count)
+            {
+                _analyzed = true;
+            }
+        }
     }
 }
