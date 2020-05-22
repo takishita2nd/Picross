@@ -8,17 +8,17 @@ namespace Picross.logic
 {
     partial class PicrossAnalyze
     {
-        // 解析パターンその５
-        // 端っこ（先頭）が塗られていたら塗る。
-        private void pattern5()
+        // 解析パターンその６
+        // 端っこ（後ろ）が塗られていたら塗る。
+        private void pattern6()
         {
             // Row
-            pattern5Row();
+            pattern6Row();
             // Col
-            pattern5Col();
+            pattern6Col();
         }
 
-        private void pattern5Row()
+        private void pattern6Row()
         {
             int row = 0;
             foreach (var rowlist in rowNumbers)
@@ -67,13 +67,14 @@ namespace Picross.logic
                 foreach (var dataList in data)
                 {
                     // 端っこが塗られているか？
+                    dataList.Reverse();
                     if (dataList[0].IsPainted())
                     {
                         // すでに処理済みか？
                         if (tempRowList.AnalyzeDatas[rowNumberIndex].IsAnalyzed())
                         {
                             rowNumberIndex++;
-                            if (rowNumberIndex >= rowlist.AnalyzeDatas.Count)
+                            if (rowNumberIndex >= tempRowList.AnalyzeDatas.Count)
                             {
                                 break;
                             }
@@ -102,7 +103,7 @@ namespace Picross.logic
                         }
                     }
                     rowNumberIndex++;
-                    if (rowNumberIndex >= rowlist.AnalyzeDatas.Count)
+                    if (rowNumberIndex >= tempRowList.AnalyzeDatas.Count)
                     {
                         break;
                     }
@@ -111,7 +112,7 @@ namespace Picross.logic
             }
         }
 
-        private void pattern5Col()
+        private void pattern6Col()
         {
             int col = 0;
             foreach (var collist in colNumbers)
@@ -121,8 +122,6 @@ namespace Picross.logic
                     col++;
                     continue;
                 }
-                var tempColList = collist.Clone();
-                tempColList.AnalyzeDatas.Reverse();
 
                 // 塗った場所が端っこならそこを塗る
                 // マスクされていない部分をリスト化して取得する
@@ -157,13 +156,15 @@ namespace Picross.logic
                 }
 
                 int colNumberIndex = 0;
+                data.Reverse();
                 foreach (var dataList in data)
                 {
                     // 端っこが塗られているか？
+                    dataList.Reverse();
                     if (dataList[0].IsPainted())
                     {
                         // すでに処理済みか？
-                        if (tempColList.AnalyzeDatas[colNumberIndex].IsAnalyzed())
+                        if (collist.AnalyzeDatas[colNumberIndex].IsAnalyzed())
                         {
                             colNumberIndex++;
                             if (colNumberIndex >= collist.AnalyzeDatas.Count)
@@ -177,7 +178,7 @@ namespace Picross.logic
                         int count = 0;
                         foreach (var s in dataList)
                         {
-                            if (count < tempColList.AnalyzeDatas[colNumberIndex].Value)
+                            if (count < collist.AnalyzeDatas[colNumberIndex].Value)
                             {
                                 s.Paint();
                                 count++;
@@ -188,14 +189,14 @@ namespace Picross.logic
                                 {
                                     s.Mask();
                                 }
-                                tempColList.AnalyzeDatas[colNumberIndex].Analyzed();
-                                tempColList.CheckAnalyze();
+                                collist.AnalyzeDatas[colNumberIndex].Analyzed();
+                                collist.CheckAnalyze();
                                 break;
                             }
                         }
                     }
                     colNumberIndex++;
-                    if (colNumberIndex >= collist.AnalyzeDatas.Count)
+                    if(colNumberIndex >= collist.AnalyzeDatas.Count)
                     {
                         break;
                     }

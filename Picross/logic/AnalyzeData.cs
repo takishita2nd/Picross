@@ -27,5 +27,14 @@ namespace Picross.logic
             _analyzed = true;
         }
 
+        public AnalyzeData Clone()
+        {
+            var clone = new AnalyzeData(Value);
+            if (_analyzed)
+            {
+                clone.Analyzed();
+            }
+            return clone;
+        }
     }
 }

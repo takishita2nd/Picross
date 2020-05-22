@@ -64,7 +64,19 @@ namespace Picross.logic
                 pattern3();
                 pattern4();
                 pattern5();
+                pattern6();
             }
+            //int roop = 0;
+            //while (roop < 1)
+            //{
+            //    pattern2();
+            //    pattern3();
+            //    pattern4();
+            //    pattern5();
+            //    pattern6();
+            //    roop++;
+            //}
+
             return _bitmapData;
         }
 
