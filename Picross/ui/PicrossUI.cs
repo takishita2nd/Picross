@@ -166,6 +166,31 @@ namespace Picross.ui
             loadButton.SetAction(() =>
             {
                 FileAccess.Load(ref rowNumberSquare, ref colNumberSquare);
+                int row = rowNumberSquare.Count();
+                int col = colNumberSquare.Count();
+                while (row != drawSquares.Count)
+                {
+                    if (drawSquares.Count > row)
+                    {
+                        deleteRow();
+                    }
+                    else
+                    {
+                        addRow();
+                    }
+                }
+                while (col != drawSquares[0].Count)
+                {
+                    if (drawSquares[0].Count > col)
+                    {
+                        deleteCol();
+                    }
+                    else
+                    {
+                        addCol();
+                    }
+
+                }
             });
 
             while (asd.Engine.DoEvents())
