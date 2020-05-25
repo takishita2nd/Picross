@@ -58,24 +58,33 @@ namespace Picross.logic
         public BitmapData[,] Run()
         {
             pattern1();
-            while (checkPainedCount())
-            {
-                pattern2();
-                pattern3();
-                pattern4();
-                pattern5();
-                pattern6();
-            }
-            //int roop = 0;
-            //while (roop < 1)
+            //while (checkPainedCount())
             //{
             //    pattern2();
             //    pattern3();
             //    pattern4();
             //    pattern5();
             //    pattern6();
-            //    roop++;
+            //    pattern7();
             //}
+            int roop = 0;
+            while (roop < 3)
+            {
+                pattern2();
+                pattern3();
+                pattern4();
+                if(roop < 2)
+                {
+                    pattern5();
+                    pattern6();
+                    pattern7();
+                }
+                else
+                {
+                    pattern5();
+                }
+                roop++;
+            }
 
             return _bitmapData;
         }
