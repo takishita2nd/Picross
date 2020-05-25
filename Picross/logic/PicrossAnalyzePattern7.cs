@@ -9,7 +9,7 @@ namespace Picross.logic
     partial class PicrossAnalyze
     {
         // 解析パターンその７
-        // 端っこ（後ろ）が塗られていたら塗る。
+        // 数字が１個で２マス塗られている場合はその間を塗る
         private void pattern7()
         {
             // Row

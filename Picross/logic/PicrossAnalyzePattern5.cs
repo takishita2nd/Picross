@@ -101,11 +101,7 @@ namespace Picross.logic
                             }
                         }
                     }
-                    rowNumberIndex++;
-                    if (rowNumberIndex >= rowlist.AnalyzeDatas.Count)
-                    {
-                        break;
-                    }
+                    break;
                 }
                 row++;
             }
@@ -194,11 +190,7 @@ namespace Picross.logic
                             }
                         }
                     }
-                    colNumberIndex++;
-                    if (colNumberIndex >= collist.AnalyzeDatas.Count)
-                    {
-                        break;
-                    }
+                    break;
                 }
                 col++;
             }
