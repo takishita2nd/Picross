@@ -66,10 +66,11 @@ namespace Picross.logic
                 pattern5();
                 pattern6();
                 pattern7();
+                pattern8();
                 doMask();
             }
             //int roop = 0;
-            //while (roop < 7)
+            //while (roop < 2)
             //{
             //    pattern2();
             //    pattern3();
@@ -77,6 +78,7 @@ namespace Picross.logic
             //    pattern5();
             //    pattern6();
             //    pattern7();
+            //    pattern8();
             //    doMask();
             //    roop++;
             //}
