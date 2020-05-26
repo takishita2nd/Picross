@@ -66,9 +66,10 @@ namespace Picross.logic
                 pattern5();
                 pattern6();
                 pattern7();
+                doMask();
             }
             //int roop = 0;
-            //while (roop < 4)
+            //while (roop < 7)
             //{
             //    pattern2();
             //    pattern3();
@@ -76,12 +77,7 @@ namespace Picross.logic
             //    pattern5();
             //    pattern6();
             //    pattern7();
-            //    if (roop < 2)
-            //    {
-            //    }
-            //    else
-            //    {
-            //    }
+            //    doMask();
             //    roop++;
             //}
 
@@ -107,6 +103,50 @@ namespace Picross.logic
             }
             oldPaintedCount = newPaintedCount;
             return true;
+        }
+
+        private void doMask()
+        {
+            doMaskRow();
+            doMaskCol();
+        }
+
+        private void doMaskRow()
+        {
+            int row = 0;
+            foreach (var list in rowNumbers)
+            {
+                if (list.IsAnalyzed())
+                {
+                    for (int col = 0; col < colNumbers.Count; col++)
+                    {
+                        if (_bitmapData[row, col].IsValid() == false)
+                        {
+                            _bitmapData[row, col].Mask();
+                        }
+                    }
+                }
+                row++;
+            }
+        }
+
+        private void doMaskCol()
+        {
+            int col = 0;
+            foreach (var list in colNumbers)
+            {
+                if (list.IsAnalyzed())
+                {
+                    for (int row = 0; row < rowNumbers.Count; row++)
+                    {
+                        if (_bitmapData[row, col].IsValid() == false)
+                        {
+                            _bitmapData[row, col].Mask();
+                        }
+                    }
+                }
+                col++;
+            }
         }
     }
 }

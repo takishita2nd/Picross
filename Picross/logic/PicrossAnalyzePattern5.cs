@@ -13,12 +13,14 @@ namespace Picross.logic
         private void pattern5()
         {
             // Row
-            pattern5Row();
+            pattern5RowFront();
+            pattern5RowBack();
             // Col
-            pattern5Col();
+            pattern5ColFront();
+            pattern5ColBack();
         }
 
-        private void pattern5Row()
+        private void pattern5RowFront()
         {
             int row = 0;
             foreach (var rowlist in rowNumbers)
@@ -28,8 +30,7 @@ namespace Picross.logic
                     row++;
                     continue;
                 }
-                var tempRowList = rowlist.Clone();
-                tempRowList.AnalyzeDatas.Reverse();
+                rowlist.AnalyzeDatas.Reverse();
 
                 // 塗った場所が端っこならそこを塗る
                 // マスクされていない部分をリスト化して取得する
@@ -70,7 +71,7 @@ namespace Picross.logic
                     if (dataList[0].IsPainted())
                     {
                         // すでに処理済みか？
-                        if (tempRowList.AnalyzeDatas[rowNumberIndex].IsAnalyzed())
+                        if (rowlist.AnalyzeDatas[rowNumberIndex].IsAnalyzed())
                         {
                             rowNumberIndex++;
                             if (rowNumberIndex >= rowlist.AnalyzeDatas.Count)
@@ -80,11 +81,29 @@ namespace Picross.logic
                             continue;
                         }
 
+                        // 塗れるか？
+                        int painted = 0;
+                        foreach (var s in dataList)
+                        {
+                            if (s.IsPainted())
+                            {
+                                painted++;
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                        if (painted > rowlist.AnalyzeDatas[rowNumberIndex].Value)
+                        {
+                            break;
+                        }
+
                         // 数字に従ってマスを塗る
                         int count = 0;
                         foreach (var s in dataList)
                         {
-                            if (count < tempRowList.AnalyzeDatas[rowNumberIndex].Value)
+                            if (count < rowlist.AnalyzeDatas[rowNumberIndex].Value)
                             {
                                 s.Paint();
                                 count++;
@@ -95,8 +114,115 @@ namespace Picross.logic
                                 {
                                     s.Mask();
                                 }
-                                tempRowList.AnalyzeDatas[rowNumberIndex].Analyzed();
-                                tempRowList.CheckAnalyze();
+                                rowlist.AnalyzeDatas[rowNumberIndex].Analyzed();
+                                rowlist.CheckAnalyze();
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                }
+                rowlist.AnalyzeDatas.Reverse();
+                row++;
+            }
+        }
+
+        private void pattern5RowBack()
+        {
+            int row = 0;
+            foreach (var rowlist in rowNumbers)
+            {
+                if (rowlist.IsAnalyzed())
+                {
+                    row++;
+                    continue;
+                }
+
+                // 塗った場所が端っこならそこを塗る
+                // マスクされていない部分をリスト化して取得する
+                List<List<BitmapData>> data = new List<List<BitmapData>>();
+                {
+                    List<BitmapData> dataList = new List<BitmapData>();
+                    for (int col = 0; col < colNumbers.Count; col++)
+                    {
+                        if (_bitmapData[row, col].IsMasked() == false)
+                        {
+                            dataList.Add(_bitmapData[row, col]);
+                        }
+                        else
+                        {
+                            if (dataList.Count != 0)
+                            {
+                                data.Add(dataList);
+                                dataList = new List<BitmapData>();
+                            }
+                        }
+                    }
+                    if (dataList.Count != 0)
+                    {
+                        data.Add(dataList);
+                    }
+
+                    if (data.Count == 0)
+                    {
+                        row++;
+                        continue;
+                    }
+                }
+
+                int rowNumberIndex = 0;
+                data.Reverse();
+                foreach (var dataList in data)
+                {
+                    // 端っこが塗られているか？
+                    if (dataList[0].IsPainted())
+                    {
+                        // すでに処理済みか？
+                        if (rowlist.AnalyzeDatas[rowNumberIndex].IsAnalyzed())
+                        {
+                            rowNumberIndex++;
+                            if (rowNumberIndex >= rowlist.AnalyzeDatas.Count)
+                            {
+                                break;
+                            }
+                            continue;
+                        }
+
+                        // 塗れるか？
+                        int painted = 0;
+                        foreach (var s in dataList)
+                        {
+                            if (s.IsPainted())
+                            {
+                                painted++;
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                        if (painted > rowlist.AnalyzeDatas[rowNumberIndex].Value)
+                        {
+                            break;
+                        }
+
+                        // 数字に従ってマスを塗る
+                        int count = 0;
+                        foreach (var s in dataList)
+                        {
+                            if (count < rowlist.AnalyzeDatas[rowNumberIndex].Value)
+                            {
+                                s.Paint();
+                                count++;
+                            }
+                            else
+                            {
+                                if (s.IsMasked() == false)
+                                {
+                                    s.Mask();
+                                }
+                                rowlist.AnalyzeDatas[rowNumberIndex].Analyzed();
+                                rowlist.CheckAnalyze();
                                 break;
                             }
                         }
@@ -107,7 +233,7 @@ namespace Picross.logic
             }
         }
 
-        private void pattern5Col()
+        private void pattern5ColFront()
         {
             int col = 0;
             foreach (var collist in colNumbers)
@@ -117,8 +243,7 @@ namespace Picross.logic
                     col++;
                     continue;
                 }
-                var tempColList = collist.Clone();
-                tempColList.AnalyzeDatas.Reverse();
+                collist.AnalyzeDatas.Reverse();
 
                 // 塗った場所が端っこならそこを塗る
                 // マスクされていない部分をリスト化して取得する
@@ -159,7 +284,7 @@ namespace Picross.logic
                     if (dataList[0].IsPainted())
                     {
                         // すでに処理済みか？
-                        if (tempColList.AnalyzeDatas[colNumberIndex].IsAnalyzed())
+                        if (collist.AnalyzeDatas[colNumberIndex].IsAnalyzed())
                         {
                             colNumberIndex++;
                             if (colNumberIndex >= collist.AnalyzeDatas.Count)
@@ -169,11 +294,29 @@ namespace Picross.logic
                             continue;
                         }
 
+                        // 塗れるか？
+                        int painted = 0;
+                        foreach (var s in dataList)
+                        {
+                            if (s.IsPainted())
+                            {
+                                painted++;
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                        if (painted > collist.AnalyzeDatas[colNumberIndex].Value)
+                        {
+                            break;
+                        }
+
                         // 数字に従ってマスを塗る
                         int count = 0;
                         foreach (var s in dataList)
                         {
-                            if (count < tempColList.AnalyzeDatas[colNumberIndex].Value)
+                            if (count < collist.AnalyzeDatas[colNumberIndex].Value)
                             {
                                 s.Paint();
                                 count++;
@@ -184,8 +327,114 @@ namespace Picross.logic
                                 {
                                     s.Mask();
                                 }
-                                tempColList.AnalyzeDatas[colNumberIndex].Analyzed();
-                                tempColList.CheckAnalyze();
+                                collist.AnalyzeDatas[colNumberIndex].Analyzed();
+                                collist.CheckAnalyze();
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                }
+                collist.AnalyzeDatas.Reverse();
+                col++;
+            }
+        }
+        private void pattern5ColBack()
+        {
+            int col = 0;
+            foreach (var collist in colNumbers)
+            {
+                if (collist.IsAnalyzed())
+                {
+                    col++;
+                    continue;
+                }
+
+                // 塗った場所が端っこならそこを塗る
+                // マスクされていない部分をリスト化して取得する
+                List<List<BitmapData>> data = new List<List<BitmapData>>();
+                {
+                    List<BitmapData> dataList = new List<BitmapData>();
+                    for (int row = 0; row < rowNumbers.Count; row++)
+                    {
+                        if (_bitmapData[row, col].IsMasked() == false)
+                        {
+                            dataList.Add(_bitmapData[row, col]);
+                        }
+                        else
+                        {
+                            if (dataList.Count != 0)
+                            {
+                                data.Add(dataList);
+                                dataList = new List<BitmapData>();
+                            }
+                        }
+                    }
+                    if (dataList.Count != 0)
+                    {
+                        data.Add(dataList);
+                    }
+
+                    if (data.Count == 0)
+                    {
+                        col++;
+                        continue;
+                    }
+                }
+
+                int colNumberIndex = 0;
+                data.Reverse();
+                foreach (var dataList in data)
+                {
+                    // 端っこが塗られているか？
+                    if (dataList[0].IsPainted())
+                    {
+                        // すでに処理済みか？
+                        if (collist.AnalyzeDatas[colNumberIndex].IsAnalyzed())
+                        {
+                            colNumberIndex++;
+                            if (colNumberIndex >= collist.AnalyzeDatas.Count)
+                            {
+                                break;
+                            }
+                            continue;
+                        }
+
+                        // 塗れるか？
+                        int painted = 0;
+                        foreach (var s in dataList)
+                        {
+                            if (s.IsPainted())
+                            {
+                                painted++;
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                        if (painted > collist.AnalyzeDatas[colNumberIndex].Value)
+                        {
+                            break;
+                        }
+
+                        // 数字に従ってマスを塗る
+                        int count = 0;
+                        foreach (var s in dataList)
+                        {
+                            if (count < collist.AnalyzeDatas[colNumberIndex].Value)
+                            {
+                                s.Paint();
+                                count++;
+                            }
+                            else
+                            {
+                                if (s.IsMasked() == false)
+                                {
+                                    s.Mask();
+                                }
+                                collist.AnalyzeDatas[colNumberIndex].Analyzed();
+                                collist.CheckAnalyze();
                                 break;
                             }
                         }
@@ -194,6 +443,7 @@ namespace Picross.logic
                 }
                 col++;
             }
+
         }
     }
 }
