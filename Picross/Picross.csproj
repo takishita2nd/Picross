@@ -83,6 +83,7 @@
     <Compile Include="logic\PicrossAnalyze.cs" />
     <Compile Include="logic\PicrossAnalyzePattern1.cs" />
     <Compile Include="logic\PicrossAnalyzePattern2.cs" />
+    <Compile Include="logic\PicrossAnalyzePattern10.cs" />
     <Compile Include="logic\PicrossAnalyzePattern9.cs" />
     <Compile Include="logic\PicrossAnalyzePattern8.cs" />
     <Compile Include="logic\PicrossAnalyzePattern7.cs" />

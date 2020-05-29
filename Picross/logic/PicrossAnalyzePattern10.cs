@@ -10,17 +10,17 @@ namespace Picross.logic
 {
     partial class PicrossAnalyze
     {
-        // 解析パターンその９
-        // 中央の塗った場所から、塗れない場所をマスクする
-        private void pattern9()
+        // 解析パターンその１０
+        // 中央の塗った場所から、塗れない場所をマスクする（数字が２個の場合）
+        private void pattern10()
         {
             // Row
-            pattern9Row();
+            pattern10Row();
             // Col
-            pattern9Col();
+            pattern10Col();
         }
 
-        private void pattern9Row()
+        private void pattern10Row()
         {
             int row = 0;
             foreach (var rowlist in rowNumbers)
@@ -31,13 +31,21 @@ namespace Picross.logic
                     continue;
                 }
 
-                // 有効な数字で一番大きいものを取り出す
-                if(rowlist.AnalyzeDatas.Count != 1)
+                // 有効な数字を取り出す
+                List<int> values = new List<int>();
+                foreach (var data in rowlist.AnalyzeDatas)
+                {
+                    if (data.IsAnalyzed())
+                    {
+                        continue;
+                    }
+                    values.Add(data.Value);
+                }
+                if (values.Count != 2)
                 {
                     row++;
                     continue;
                 }
-                int value = rowlist.AnalyzeDatas[0].Value;
 
                 // 対象となるマスを抽出する
                 List<List<BitmapData>> bitmapLists = extractTargetBitmapListsCol(row);
@@ -67,29 +75,37 @@ namespace Picross.logic
                         }
                     }
                 }
-                // 左側をマスク
-                for(int col = 0; col < rightCol - value; col++)
+
+                var bitmaplist = bitmapLists[0];
+                if(bitmaplist.Count <= 1)
                 {
-                    if(_bitmapData[row,col].IsValid() == false)
-                    {
-                        _bitmapData[row, col].Mask();
-                    }
+                    row++;
+                    continue;
                 }
 
-                // 右側をマスク
-                for (int col = leftCol + value; col < colNumbers.Count; col++)
+                // 塗る対象は右側か、左側か？
+                int bigValue = 0;
+                int smallValue = 0;
+                if (values[0] > values[1])
                 {
-                    if (_bitmapData[row, col].IsValid() == false)
-                    {
-                        _bitmapData[row, col].Mask();
-                    }
+                    bigValue = values[0];
+                    smallValue = values[1];
+                    bitmaplist.RemoveRange(0, smallValue + 1);
                 }
+                else
+                {
+                    bigValue = values[1];
+                    smallValue = values[0];
+                    bitmaplist.RemoveRange(bitmaplist.Count - (smallValue + 1), smallValue + 1);
+                }
+
+                paintCenter(bigValue, ref bitmaplist);
 
                 row++;
             }
         }
 
-        private void pattern9Col()
+        private void pattern10Col()
         {
             int col = 0;
             foreach (var collist in colNumbers)
@@ -101,12 +117,20 @@ namespace Picross.logic
                 }
 
                 // 有効な数字で一番大きいものを取り出す
-                if (collist.AnalyzeDatas.Count != 1)
+                List<int> values = new List<int>();
+                foreach (var data in collist.AnalyzeDatas)
+                {
+                    if (data.IsAnalyzed())
+                    {
+                        continue;
+                    }
+                    values.Add(data.Value);
+                }
+                if (values.Count != 2)
                 {
                     col++;
                     continue;
                 }
-                int value = collist.AnalyzeDatas[0].Value;
 
                 // 対象となるマスを抽出する
                 List<List<BitmapData>> bitmapLists = extractTargetBitmapListsRow(col);
@@ -136,23 +160,31 @@ namespace Picross.logic
                         }
                     }
                 }
-                // 左側をマスク
-                for (int row = 0; row < downRow - value; row++)
+
+                var bitmaplist = bitmapLists[0];
+                if (bitmaplist.Count <= 1)
                 {
-                    if (_bitmapData[row, col].IsValid() == false)
-                    {
-                        _bitmapData[row, col].Mask();
-                    }
+                    col++;
+                    continue;
                 }
 
-                // 右側をマスク
-                for (int row = topRow + value; row < rowNumbers.Count; row++)
+                // 塗る対象は右側か、左側か？
+                int bigValue = 0;
+                int smallValue = 0;
+                if (values[0] > values[1])
                 {
-                    if (_bitmapData[row, col].IsValid() == false)
-                    {
-                        _bitmapData[row, col].Mask();
-                    }
+                    bigValue = values[0];
+                    smallValue = values[1];
+                    bitmaplist.RemoveRange(0, smallValue + 1);
                 }
+                else
+                {
+                    bigValue = values[1];
+                    smallValue = values[0];
+                    bitmaplist.RemoveRange(bitmaplist.Count - (smallValue + 1), smallValue + 1);
+                }
+
+                paintCenter(bigValue, ref bitmaplist);
 
                 col++;
             }

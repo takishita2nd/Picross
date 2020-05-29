@@ -48,62 +48,15 @@ namespace Picross.logic
                 }
 
                 // 対象となるマスを抽出する
-                List<List<BitmapData>> bitmapLists = new List<List<BitmapData>>();
-                List<BitmapData> bitmaplist = new List<BitmapData>();
-                for (int col = 0; col < colNumbers.Count; col++)
-                {
-                    // マスクとマスクの間が全て塗られていたら、そこは対象としない
-                    if (_bitmapData[row, col].IsMasked())
-                    {
-                        if(bitmaplist.Count != 0)
-                        {
-                            bool done = true;
-                            foreach(var bitmap in bitmaplist)
-                            {
-                                if(bitmap.IsPainted() == false)
-                                {
-                                    done = false;
-                                }
-                            }
-                            if(done == false)
-                            {
-                                bitmapLists.Add(bitmaplist);
-                            }
-                            bitmaplist = new List<BitmapData>();
-                        }
-                        continue;
-                    }
-                    bitmaplist.Add(_bitmapData[row, col]);
-                }
-                if (bitmaplist.Count != 0)
-                {
-                    bitmapLists.Add(bitmaplist);
-                }
+                List<List<BitmapData>> bitmapLists = extractTargetBitmapListsCol(row);
                 if(bitmapLists.Count != 1)
                 {
                     row++;
                     continue;
                 }
 
-                int value = values[0];
                 List<BitmapData> bitmaps = bitmapLists[0];
-                if(value < bitmaps.Count && value * 2 > bitmaps.Count)
-                {
-                    int paintNum = value * 2 - bitmaps.Count;
-                    int countMax = 0;
-                    if(paintNum % 2 == 1)
-                    {
-                        countMax = paintNum / 2 + 1;
-                    }
-                    else
-                    {
-                        countMax = paintNum / 2;
-                    }
-                    for (int count = -paintNum / 2; count < countMax; count++)
-                    {
-                        bitmaps[bitmaps.Count / 2 + count].Paint();
-                    }
-                }
+                paintCenter(values[0], ref bitmaps);
                 row++;
             }
         }
@@ -136,64 +89,112 @@ namespace Picross.logic
                 }
 
                 // 対象となるマスを抽出する
-                List<List<BitmapData>> bitmapLists = new List<List<BitmapData>>();
-                List<BitmapData> bitmaplist = new List<BitmapData>();
-                for (int row = 0; row < rowNumbers.Count; row++)
-                {
-                    // マスクとマスクの間が全て塗られていたら、そこは対象としない
-                    if (_bitmapData[row, col].IsMasked())
-                    {
-                        if (bitmaplist.Count != 0)
-                        {
-                            bool done = true;
-                            foreach (var bitmap in bitmaplist)
-                            {
-                                if (bitmap.IsPainted() == false)
-                                {
-                                    done = false;
-                                }
-                            }
-                            if (done == false)
-                            {
-                                bitmapLists.Add(bitmaplist);
-                            }
-                            bitmaplist = new List<BitmapData>();
-                        }
-                        continue;
-                    }
-                    bitmaplist.Add(_bitmapData[row, col]);
-                }
-                if (bitmaplist.Count != 0)
-                {
-                    bitmapLists.Add(bitmaplist);
-                }
+                List<List<BitmapData>> bitmapLists = extractTargetBitmapListsRow(col);
                 if (bitmapLists.Count != 1)
                 {
                     col++;
                     continue;
                 }
 
-                int value = values[0];
                 List<BitmapData> bitmaps = bitmapLists[0];
-                if (value < bitmaps.Count && value * 2 > bitmaps.Count)
-                {
-                    int paintNum = value * 2 - bitmaps.Count;
-                    int countMax = 0;
-                    if (paintNum % 2 == 1)
-                    {
-                        countMax = paintNum / 2 + 1;
-                    }
-                    else
-                    {
-                        countMax = paintNum / 2;
-                    }
-                    for (int count = -paintNum / 2; count < countMax; count++)
-                    {
-                        bitmaps[bitmaps.Count / 2 + count].Paint();
-                    }
-                }
+                paintCenter(values[0], ref bitmaps);
 
                 col++;
+            }
+        }
+
+        private List<List<BitmapData>> extractTargetBitmapListsCol(int row)
+        {
+            List<List<BitmapData>> bitmapLists = new List<List<BitmapData>>();
+            List<BitmapData> bitmaplist = new List<BitmapData>();
+            for (int col = 0; col < colNumbers.Count; col++)
+            {
+                // マスクとマスクの間が全て塗られていたら、そこは対象としない
+                if (_bitmapData[row, col].IsMasked())
+                {
+                    if (bitmaplist.Count != 0)
+                    {
+                        bool done = true;
+                        foreach (var bitmap in bitmaplist)
+                        {
+                            if (bitmap.IsPainted() == false)
+                            {
+                                done = false;
+                            }
+                        }
+                        if (done == false)
+                        {
+                            bitmapLists.Add(bitmaplist);
+                        }
+                        bitmaplist = new List<BitmapData>();
+                    }
+                    continue;
+                }
+                bitmaplist.Add(_bitmapData[row, col]);
+            }
+            if (bitmaplist.Count != 0)
+            {
+                bitmapLists.Add(bitmaplist);
+            }
+
+            return bitmapLists;
+        }
+
+        private List<List<BitmapData>> extractTargetBitmapListsRow(int col)
+        {
+            List<List<BitmapData>> bitmapLists = new List<List<BitmapData>>();
+            List<BitmapData> bitmaplist = new List<BitmapData>();
+            for (int row = 0; row < rowNumbers.Count; row++)
+            {
+                // マスクとマスクの間が全て塗られていたら、そこは対象としない
+                if (_bitmapData[row, col].IsMasked())
+                {
+                    if (bitmaplist.Count != 0)
+                    {
+                        bool done = true;
+                        foreach (var bitmap in bitmaplist)
+                        {
+                            if (bitmap.IsPainted() == false)
+                            {
+                                done = false;
+                            }
+                        }
+                        if (done == false)
+                        {
+                            bitmapLists.Add(bitmaplist);
+                        }
+                        bitmaplist = new List<BitmapData>();
+                    }
+                    continue;
+                }
+                bitmaplist.Add(_bitmapData[row, col]);
+            }
+            if (bitmaplist.Count != 0)
+            {
+                bitmapLists.Add(bitmaplist);
+            }
+
+            return bitmapLists;
+        }
+
+        private void paintCenter(int value, ref List<BitmapData> bitmaps)
+        {
+            if (value < bitmaps.Count && value * 2 > bitmaps.Count)
+            {
+                int paintNum = value * 2 - bitmaps.Count;
+                int countMax = 0;
+                if (paintNum % 2 == 1)
+                {
+                    countMax = paintNum / 2 + 1;
+                }
+                else
+                {
+                    countMax = paintNum / 2;
+                }
+                for (int count = -paintNum / 2; count < countMax; count++)
+                {
+                    bitmaps[bitmaps.Count / 2 + count].Paint();
+                }
             }
         }
     }
