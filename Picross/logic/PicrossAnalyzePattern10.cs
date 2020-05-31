@@ -30,6 +30,7 @@ namespace Picross.logic
                     row++;
                     continue;
                 }
+                rowlist.AnalyzeDatas.Reverse();
 
                 // 有効な数字を取り出す
                 List<int> values = new List<int>();
@@ -43,6 +44,7 @@ namespace Picross.logic
                 }
                 if (values.Count != 2)
                 {
+                    rowlist.AnalyzeDatas.Reverse();
                     row++;
                     continue;
                 }
@@ -51,34 +53,15 @@ namespace Picross.logic
                 List<List<BitmapData>> bitmapLists = extractTargetBitmapListsCol(row);
                 if (bitmapLists.Count != 1)
                 {
+                    rowlist.AnalyzeDatas.Reverse();
                     row++;
                     continue;
-                }
-
-                // 塗られている場所を特定
-                int leftCol = colNumbers.Count;
-                int rightCol = 0;
-                bool painted = false;
-                foreach (var bitmap in bitmapLists[0])
-                {
-                    if(bitmap.IsPainted())
-                    {
-                        leftCol = bitmap.Col;
-                        painted = true;
-                    }
-                    else
-                    {
-                        if (painted)
-                        {
-                            rightCol = bitmap.Col;
-                            break;
-                        }
-                    }
                 }
 
                 var bitmaplist = bitmapLists[0];
                 if(bitmaplist.Count <= 1)
                 {
+                    rowlist.AnalyzeDatas.Reverse();
                     row++;
                     continue;
                 }
@@ -90,17 +73,24 @@ namespace Picross.logic
                 {
                     bigValue = values[0];
                     smallValue = values[1];
-                    bitmaplist.RemoveRange(0, smallValue + 1);
+                    if (bitmaplist.Count > smallValue)
+                    {
+                        bitmaplist.RemoveRange(bitmaplist.Count - (smallValue + 1), smallValue + 1);
+                    }
                 }
                 else
                 {
                     bigValue = values[1];
                     smallValue = values[0];
-                    bitmaplist.RemoveRange(bitmaplist.Count - (smallValue + 1), smallValue + 1);
+                    if (bitmaplist.Count > smallValue)
+                    {
+                        bitmaplist.RemoveRange(0, smallValue + 1);
+                    }
                 }
 
                 paintCenter(bigValue, ref bitmaplist);
 
+                rowlist.AnalyzeDatas.Reverse();
                 row++;
             }
         }
@@ -115,6 +105,7 @@ namespace Picross.logic
                     col++;
                     continue;
                 }
+                collist.AnalyzeDatas.Reverse();
 
                 // 有効な数字で一番大きいものを取り出す
                 List<int> values = new List<int>();
@@ -128,6 +119,7 @@ namespace Picross.logic
                 }
                 if (values.Count != 2)
                 {
+                    collist.AnalyzeDatas.Reverse();
                     col++;
                     continue;
                 }
@@ -136,34 +128,15 @@ namespace Picross.logic
                 List<List<BitmapData>> bitmapLists = extractTargetBitmapListsRow(col);
                 if (bitmapLists.Count != 1)
                 {
+                    collist.AnalyzeDatas.Reverse();
                     col++;
                     continue;
-                }
-
-                // 塗られている場所を特定
-                int topRow = rowNumbers.Count;
-                int downRow = 0;
-                bool painted = false;
-                foreach (var bitmap in bitmapLists[0])
-                {
-                    if (bitmap.IsPainted())
-                    {
-                        topRow = bitmap.Row;
-                        painted = true;
-                    }
-                    else
-                    {
-                        if (painted)
-                        {
-                            downRow = bitmap.Row;
-                            break;
-                        }
-                    }
                 }
 
                 var bitmaplist = bitmapLists[0];
                 if (bitmaplist.Count <= 1)
                 {
+                    collist.AnalyzeDatas.Reverse();
                     col++;
                     continue;
                 }
@@ -175,17 +148,24 @@ namespace Picross.logic
                 {
                     bigValue = values[0];
                     smallValue = values[1];
-                    bitmaplist.RemoveRange(0, smallValue + 1);
+                    if (bitmaplist.Count > smallValue)
+                    {
+                        bitmaplist.RemoveRange(bitmaplist.Count - (smallValue + 1), smallValue + 1);
+                    }
                 }
                 else
                 {
                     bigValue = values[1];
                     smallValue = values[0];
-                    bitmaplist.RemoveRange(bitmaplist.Count - (smallValue + 1), smallValue + 1);
+                    if(bitmaplist.Count > smallValue)
+                    {
+                        bitmaplist.RemoveRange(0, smallValue + 1);
+                    }
                 }
 
                 paintCenter(bigValue, ref bitmaplist);
 
+                collist.AnalyzeDatas.Reverse();
                 col++;
             }
         }

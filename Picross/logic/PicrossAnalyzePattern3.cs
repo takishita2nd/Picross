@@ -63,6 +63,7 @@ namespace Picross.logic
                     row++;
                     continue;
                 }
+                countList.Reverse();
                 for (int i = 0; i < countList.Count; i++)
                 {
                     if (rowlist.AnalyzeDatas[i].Value != countList[i])

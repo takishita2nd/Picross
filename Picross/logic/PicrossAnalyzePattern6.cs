@@ -60,6 +60,7 @@ namespace Picross.logic
                     if (data.Count == 0)
                     {
                         row++;
+                        rowlist.AnalyzeDatas.Reverse();
                         continue;
                     }
                 }
@@ -98,6 +99,14 @@ namespace Picross.logic
                         if (painted > rowlist.AnalyzeDatas[rowNumberIndex].Value)
                         {
                             break;
+                        }
+
+                        if (rowlist.AnalyzeDatas.Count > rowNumberIndex + 1)
+                        {
+                            if (rowlist.AnalyzeDatas[rowNumberIndex].Value + rowlist.AnalyzeDatas[rowNumberIndex + 1].Value <= dataList.Count)
+                            {
+                                break;
+                            }
                         }
 
                         // 数字に従ってマスを塗る
@@ -275,6 +284,7 @@ namespace Picross.logic
                     if (data.Count == 0)
                     {
                         col++;
+                        collist.AnalyzeDatas.Reverse();
                         continue;
                     }
                 }
@@ -313,6 +323,14 @@ namespace Picross.logic
                         if (painted > collist.AnalyzeDatas[colNumberIndex].Value)
                         {
                             break;
+                        }
+
+                        if (collist.AnalyzeDatas.Count > colNumberIndex + 1)
+                        {
+                            if (collist.AnalyzeDatas[colNumberIndex].Value + collist.AnalyzeDatas[colNumberIndex + 1].Value <= dataList.Count)
+                            {
+                                break;
+                            }
                         }
 
                         // 数字に従ってマスを塗る
@@ -387,6 +405,7 @@ namespace Picross.logic
                 }
 
                 int colNumberIndex = 0;
+                data.Reverse();
                 foreach (var dataList in data)
                 {
                     // 端っこが塗られているか？

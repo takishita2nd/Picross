@@ -70,6 +70,7 @@ namespace Picross.logic
                 pattern9();
                 pattern10();
                 doMask();
+                checkAnalyze();
             } while (checkPainedCount());
             //int roop = 0;
             //while (roop < 4)
@@ -84,6 +85,7 @@ namespace Picross.logic
             //    pattern9();
             //    pattern10();
             //    doMask();
+            //    checkAnalyze();
             //    roop++;
             //}
 
@@ -95,15 +97,15 @@ namespace Picross.logic
             int newPaintedCount = 0;
             for (int row = 0; row < rowNumbers.Count; row++)
             {
-                for(int col = 0; col < colNumbers.Count; col++)
+                for (int col = 0; col < colNumbers.Count; col++)
                 {
-                    if(_bitmapData[row, col].IsValid())
+                    if (_bitmapData[row, col].IsValid())
                     {
                         newPaintedCount++;
                     }
                 }
             }
-            if(oldPaintedCount == newPaintedCount)
+            if (oldPaintedCount == newPaintedCount)
             {
                 return false;
             }
@@ -152,6 +154,262 @@ namespace Picross.logic
                     }
                 }
                 col++;
+            }
+        }
+
+        private void checkAnalyze()
+        {
+            checkAnalyzeRowBefore();
+            checkAnalyzeRowAfter();
+            checkAnalyzeColBefore();
+            checkAnalyzeColAfter();
+        }
+
+        private void checkAnalyzeRowBefore()
+        {
+            int row = 0;
+            foreach (var rowList in rowNumbers)
+            {
+                if (rowList.IsAnalyzed())
+                {
+                    row++;
+                    continue;
+                }
+
+                rowList.AnalyzeDatas.Reverse();
+                int rowIndex = 0;
+                foreach(var rowData in rowList.AnalyzeDatas)
+                {
+                    if (rowData.IsAnalyzed())
+                    {
+                        rowIndex++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                if (rowIndex == rowList.AnalyzeDatas.Count)
+                {
+                    rowList.AnalyzeDatas.Reverse();
+                    row++;
+                    continue;
+                }
+
+                int painted = 0;
+                int count = 0;
+                for (int col = 0; col < colNumbers.Count; col++)
+                {
+                    if (_bitmapData[row, col].IsPainted())
+                    {
+                        painted++;
+                    }
+                    else if (_bitmapData[row, col].IsMasked())
+                    {
+                        if(count == rowIndex)
+                        {
+                            if (rowList.AnalyzeDatas[rowIndex].Value == painted)
+                            {
+                                rowList.AnalyzeDatas[rowIndex].Analyzed();
+                                rowList.CheckAnalyze();
+                            }
+                        }
+                        else if(painted != 0)
+                        {
+                            count++;
+                        }
+                    }
+                    else
+                    {
+                        rowList.AnalyzeDatas.Reverse();
+                        row++;
+                        break;
+                    }
+                }
+            }
+        }
+
+        private void checkAnalyzeRowAfter()
+        {
+            int row = 0;
+            foreach (var rowList in rowNumbers)
+            {
+                if (rowList.IsAnalyzed())
+                {
+                    row++;
+                    continue;
+                }
+
+                int rowIndex = 0;
+                foreach (var rowData in rowList.AnalyzeDatas)
+                {
+                    if (rowData.IsAnalyzed())
+                    {
+                        rowIndex++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                if(rowIndex == rowList.AnalyzeDatas.Count)
+                {
+                    row++;
+                    continue;
+                }
+
+                int painted = 0;
+                int count = 0;
+                for (int col = colNumbers.Count - 1; col >= 0; col--)
+                {
+                    if (_bitmapData[row, col].IsPainted())
+                    {
+                        painted++;
+                    }
+                    else if (_bitmapData[row, col].IsMasked())
+                    {
+                        if (count == rowIndex)
+                        {
+                            if (rowList.AnalyzeDatas[rowIndex].Value == painted)
+                            {
+                                rowList.AnalyzeDatas[rowIndex].Analyzed();
+                                rowList.CheckAnalyze();
+                            }
+                        }
+                        else if (painted != 0)
+                        {
+                            count++;
+                        }
+                    }
+                    else
+                    {
+                        row++;
+                        break;
+                    }
+                }
+            }
+        }
+
+        private void checkAnalyzeColBefore()
+        {
+            int col = 0;
+            foreach (var colList in colNumbers)
+            {
+                if (colList.IsAnalyzed())
+                {
+                    col++;
+                    continue;
+                }
+
+                colList.AnalyzeDatas.Reverse();
+                int colIndex = 0;
+                foreach (var colData in colList.AnalyzeDatas)
+                {
+                    if (colData.IsAnalyzed())
+                    {
+                        colIndex++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                if (colIndex == colList.AnalyzeDatas.Count)
+                {
+                    colList.AnalyzeDatas.Reverse();
+                    col++;
+                    continue;
+                }
+                int painted = 0;
+                int count = 0;
+                for (int row = 0; row < rowNumbers.Count; row++)
+                {
+                    if (_bitmapData[row, col].IsPainted())
+                    {
+                        painted++;
+                    }
+                    else if (_bitmapData[row, col].IsMasked())
+                    {
+                        if (count == colIndex)
+                        {
+                            if (colList.AnalyzeDatas[colIndex].Value == painted)
+                            {
+                                colList.AnalyzeDatas[colIndex].Analyzed();
+                                colList.CheckAnalyze();
+                            }
+                        }
+                        else if (painted != 0)
+                        {
+                            count++;
+                        }
+                    }
+                    else
+                    {
+                        colList.AnalyzeDatas.Reverse();
+                        col++;
+                        break;
+                    }
+                }
+            }
+        }
+
+        private void checkAnalyzeColAfter()
+        {
+            int col = 0;
+            foreach (var colList in colNumbers)
+            {
+                if (colList.IsAnalyzed())
+                {
+                    col++;
+                    continue;
+                }
+
+                int colIndex = 0;
+                foreach (var colData in colList.AnalyzeDatas)
+                {
+                    if (colData.IsAnalyzed())
+                    {
+                        colIndex++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                if (colIndex == colList.AnalyzeDatas.Count)
+                {
+                    col++;
+                    continue;
+                }
+                int painted = 0;
+                int count = 0;
+                for (int row = rowNumbers.Count - 1; row >= 0; row--)
+                {
+                    if (_bitmapData[row, col].IsPainted())
+                    {
+                        painted++;
+                    }
+                    else if (_bitmapData[row, col].IsMasked())
+                    {
+                        if (count == colIndex)
+                        {
+                            if (colList.AnalyzeDatas[colIndex].Value == painted)
+                            {
+                                colList.AnalyzeDatas[colIndex].Analyzed();
+                                colList.CheckAnalyze();
+                            }
+                        }
+                        else if (painted != 0)
+                        {
+                            count++;
+                        }
+                    }
+                    else
+                    {
+                        col++;
+                        break;
+                    }
+                }
             }
         }
     }

@@ -60,6 +60,7 @@ namespace Picross.logic
                     if (data.Count == 0)
                     {
                         row++;
+                        rowlist.AnalyzeDatas.Reverse();
                         continue;
                     }
                 }
@@ -206,6 +207,14 @@ namespace Picross.logic
                             break;
                         }
 
+                        if(rowlist.AnalyzeDatas.Count > rowNumberIndex + 1)
+                        {
+                            if(rowlist.AnalyzeDatas[rowNumberIndex].Value + rowlist.AnalyzeDatas[rowNumberIndex + 1].Value <= dataList.Count)
+                            {
+                                break;
+                            }
+                        }
+
                         // 数字に従ってマスを塗る
                         int count = 0;
                         foreach (var s in dataList)
@@ -273,6 +282,7 @@ namespace Picross.logic
                     if (data.Count == 0)
                     {
                         col++;
+                        collist.AnalyzeDatas.Reverse();
                         continue;
                     }
                 }
@@ -339,6 +349,7 @@ namespace Picross.logic
                 col++;
             }
         }
+
         private void pattern5ColBack()
         {
             int col = 0;
@@ -416,6 +427,14 @@ namespace Picross.logic
                         if (painted > collist.AnalyzeDatas[colNumberIndex].Value)
                         {
                             break;
+                        }
+
+                        if (collist.AnalyzeDatas.Count > colNumberIndex + 1)
+                        {
+                            if (collist.AnalyzeDatas[colNumberIndex].Value + collist.AnalyzeDatas[colNumberIndex + 1].Value <= dataList.Count)
+                            {
+                                break;
+                            }
                         }
 
                         // 数字に従ってマスを塗る
