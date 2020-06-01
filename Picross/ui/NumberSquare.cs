@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,6 +40,16 @@ namespace Picross.ui
         {
             _value = value;
             _valueText.Text = _value;
+        }
+
+        public void SetPosition(int row, int col)
+        {
+            _row = row;
+            _col = col;
+            _x = col * width + setPositionX;
+            _y = row * height + setPositionY;
+            _backTexture.Position = new asd.Vector2DF(_x, _y);
+            _valueText.Position = new asd.Vector2DF(_x + fontOffsetX, _y + fontOffsetY);
         }
 
         public void UpdateTexture(asd.Vector2DF pos)

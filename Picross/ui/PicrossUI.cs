@@ -295,21 +295,53 @@ namespace Picross.ui
                                     {
                                         if (selectedRowIndex >= 0)
                                         {
-                                            var square = new NumberSquare(selectedRowIndex, selectedColIndex - 1);
-                                            asd.Engine.AddObject2D(square.getBackTexture());
-                                            asd.Engine.AddObject2D(square.getTextObject());
-                                            rowNumberSquare[selectedRowIndex].Add(square);
+                                            if(Math.Abs(selectedColIndex - 1) > rowNumberSquare[selectedRowIndex].Count)
+                                            {
+                                                var square = new NumberSquare(selectedRowIndex, selectedColIndex - 1);
+                                                asd.Engine.AddObject2D(square.getBackTexture());
+                                                asd.Engine.AddObject2D(square.getTextObject());
+                                                rowNumberSquare[selectedRowIndex].Add(square);
+                                            }
                                         }
                                         else if (selectedColIndex >= 0)
                                         {
-                                            var square = new NumberSquare(selectedRowIndex - 1, selectedColIndex);
-                                            asd.Engine.AddObject2D(square.getBackTexture());
-                                            asd.Engine.AddObject2D(square.getTextObject());
-                                            colNumberSquare[selectedColIndex].Add(square);
+                                            if (Math.Abs(selectedRowIndex - 1) > colNumberSquare[selectedColIndex].Count)
+                                            {
+                                                var square = new NumberSquare(selectedRowIndex - 1, selectedColIndex);
+                                                asd.Engine.AddObject2D(square.getBackTexture());
+                                                asd.Engine.AddObject2D(square.getTextObject());
+                                                colNumberSquare[selectedColIndex].Add(square);
+                                            }
                                         }
                                     }
                                     else
                                     {
+                                        if (selectedRowIndex >= 0)
+                                        {
+                                            if (Math.Abs(selectedColIndex - 1) <= rowNumberSquare[selectedRowIndex].Count)
+                                            {
+                                                asd.Engine.RemoveObject2D(rowNumberSquare[selectedRowIndex][Math.Abs(selectedColIndex + 1)].getBackTexture());
+                                                asd.Engine.RemoveObject2D(rowNumberSquare[selectedRowIndex][Math.Abs(selectedColIndex + 1)].getTextObject());
+                                                rowNumberSquare[selectedRowIndex].RemoveAt(Math.Abs(selectedColIndex + 1));
+                                                for (int col = selectedColIndex + 1; Math.Abs(col) < rowNumberSquare[selectedRowIndex].Count; col--)
+                                                {
+                                                    rowNumberSquare[selectedRowIndex][Math.Abs(col)].SetPosition(selectedRowIndex, col - 1);
+                                                }
+                                            }
+                                        }
+                                        else if (selectedColIndex >= 0)
+                                        {
+                                            if (Math.Abs(selectedRowIndex - 1) <= colNumberSquare[selectedColIndex].Count)
+                                            {
+                                                asd.Engine.RemoveObject2D(colNumberSquare[selectedColIndex][Math.Abs(selectedRowIndex + 1)].getBackTexture());
+                                                asd.Engine.RemoveObject2D(colNumberSquare[selectedColIndex][Math.Abs(selectedRowIndex + 1)].getTextObject());
+                                                colNumberSquare[selectedColIndex].RemoveAt(Math.Abs(selectedRowIndex + 1));
+                                                for (int row = selectedRowIndex + 1; Math.Abs(row) < colNumberSquare[selectedColIndex].Count; row--)
+                                                {
+                                                    colNumberSquare[selectedColIndex][Math.Abs(row)].SetPosition(row - 1, selectedColIndex);
+                                                }
+                                            }
+                                        }
                                         selectedNumberSquare.SetValue("0");
                                     }
                                     selectedNumberSquare = null;
