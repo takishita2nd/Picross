@@ -153,13 +153,13 @@ namespace Picross.ui.parts
                 {
                     _selectedTextBox = _rowText;
                     _selectedValue = _rowValue;
-                    _palette.Show(pos);
+                    _palette.Show(pos, _rowValue);
                 }
                 if (_colText.IsClick(pos))
                 {
                     _selectedTextBox = _colText;
                     _selectedValue = _colValue;
-                    _palette.Show(pos);
+                    _palette.Show(pos, _colValue);
                 }
                 if (_button.IsClick(pos))
                 {
@@ -170,15 +170,20 @@ namespace Picross.ui.parts
             {
                 if (_palette.IsClick(pos))
                 {
-                    string v = _palette.GetClickValue(pos);
-                    _selectedValue = updateTextValue(_selectedTextBox, _selectedValue, v);
-                    if (_selectedTextBox.Equals(_rowText))
+                    _palette.OnClick(pos);
+                    if (_palette.IsClickEnter())
                     {
-                        _rowValue = _selectedValue;
-                    }
-                    else
-                    {
-                        _colValue = _selectedValue;
+                        _palette.Hide();
+                        _selectedValue = _palette.GetValue();
+                        _selectedTextBox.SetText(_selectedValue);
+                        if (_selectedTextBox.Equals(_rowText))
+                        {
+                            _rowValue = _selectedValue;
+                        }
+                        else
+                        {
+                            _colValue = _selectedValue;
+                        }
                     }
                 }
                 else
@@ -188,50 +193,6 @@ namespace Picross.ui.parts
                     _selectedValue = string.Empty;
                 }
             }
-        }
-
-        private string updateTextValue(TextBox textBox, string value, string v)
-        {
-            string text = string.Empty;
-            switch (v)
-            {
-                case Palette.CODE.ZERO:
-                    if(value.Length == 0)
-                    {
-                        text = string.Empty;
-                    }
-                    else if(value.Length < 2)
-                    {
-                        text = value + v;
-
-                    }
-                    else
-                    {
-                        text = value;
-                    }
-                    break;
-                case Palette.CODE.BS:
-                    if(value.Length != 0)
-                    {
-                        text = value.Remove(value.Length - 1);
-                    }
-                    break;
-                case Palette.CODE.CLR:
-                    text = string.Empty;
-                    break;
-                default:
-                    if(value.Length < 2)
-                    {
-                        text = value + v;
-                    }
-                    else
-                    {
-                        text = value;
-                    }
-                    break;
-            }
-            textBox.SetText(text);
-            return text;
         }
     }
 }

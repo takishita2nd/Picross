@@ -18,6 +18,7 @@ namespace Picross
         private static asd.Texture2D _dialogTexture = null;
         private static asd.Texture2D _paletteTexture = null;
         private static asd.Texture2D _paletteSquareTexture = null;
+        private static asd.Texture2D _paletteEnterSquareTexture = null;
         private static asd.Font _font = null;
         private static asd.Font _fonRedt = null;
         private static asd.Font _fontPalette = null;
@@ -110,6 +111,15 @@ namespace Picross
                 _paletteSquareTexture = asd.Engine.Graphics.CreateTexture2D("paletteSquare.png");
             }
             return _paletteSquareTexture;
+        }
+
+        public static asd.Texture2D getPaletteEnterSquareTexture()
+        {
+            if (_paletteEnterSquareTexture == null)
+            {
+                _paletteEnterSquareTexture = asd.Engine.Graphics.CreateTexture2D("enter.png");
+            }
+            return _paletteEnterSquareTexture;
         }
 
         public static asd.Font getFont()

@@ -8,23 +8,23 @@ namespace Picross.ui.parts
 {
     class Palette
     {
-        public class CODE
-        {
-            public const string ZERO = "0";
-            public const string BS = "BS";
-            public const string CLR = "CLR";
-        }
-
         private asd.Vector2DF palettePosition;
         private const int width = 192;
         private const int height = 256;
         private asd.TextureObject2D _texture;
-        SquareObject[,] paletteSquareObjects = new SquareObject[3, 3];
-        SquareObject paletteZeroSquareObject = new SquareObject(-1, 0, "0");
-        SquareObject paletteBSSquareObject = new SquareObject(-1, 1, "←");
-        SquareObject paletteCRSquareObject = new SquareObject(-1, 2, "Ｃ");
+        private SquareObject[,] paletteSquareObjects = new SquareObject[3, 3];
+        private SquareObject paletteZeroSquareObject = new SquareObject(-1, 0, "0");
+        private SquareObject paletteBSSquareObject = new SquareObject(-1, 1, "←");
+        private SquareObject paletteCRSquareObject = new SquareObject(-1, 2, "Ｃ");
+        private EnterSquareObject paletteENSquareObject = new EnterSquareObject(-2, 2);
+        private asd.TextObject2D _valueText;
+
         private bool _isShow = false;
         private const int priority = 11000;
+        protected int fontOffsetX = 19;
+        protected int fontOffsetY = 9;
+        private string value;
+        private bool _isClickEnter;
 
         public Palette()
         {
@@ -45,6 +45,10 @@ namespace Picross.ui.parts
             paletteCRSquareObject.SetFontOffset(10, 9);
             paletteCRSquareObject.SetPriority(priority + 1);
             paletteZeroSquareObject.SetPriority(priority + 1);
+            paletteENSquareObject.SetPriority(priority + 1);
+            _valueText = new asd.TextObject2D();
+            _valueText.Font = Resource.getPaletteFont();
+            _valueText.DrawingPriority = priority + 1;
         }
 
         public void SetEngine()
@@ -64,11 +68,14 @@ namespace Picross.ui.parts
             asd.Engine.AddObject2D(paletteBSSquareObject.getTextObject());
             asd.Engine.AddObject2D(paletteCRSquareObject.getBackTexture());
             asd.Engine.AddObject2D(paletteCRSquareObject.getTextObject());
+            asd.Engine.AddObject2D(paletteENSquareObject.getBackTexture());
+            asd.Engine.AddObject2D(_valueText);
         }
 
-        public void Show(asd.Vector2DF pos)
+        public void Show(asd.Vector2DF pos, string s)
         {
-            palettePosition = new asd.Vector2DF(pos.X, pos.Y - 64);
+            value = s;
+            palettePosition = new asd.Vector2DF(pos.X, pos.Y - 128);
             _texture.Position = palettePosition;
             _texture.Texture = Resource.getPaletteTexture();
             for (int row = 0; row < 3; row++)
@@ -85,7 +92,15 @@ namespace Picross.ui.parts
             paletteBSSquareObject.Show();
             paletteCRSquareObject.SetPosition(pos);
             paletteCRSquareObject.Show();
+            paletteENSquareObject.SetPosition(pos);
+            paletteENSquareObject.Show();
+
+            int x = (int)pos.X;
+            int y = -2 * 64 + (int)pos.Y;
+            _valueText.Position = new asd.Vector2DF(x + fontOffsetX, y + fontOffsetY);
+            _valueText.Text = value;
             _isShow = true;
+            _isClickEnter = false;
         }
 
         public void Hide()
@@ -100,7 +115,9 @@ namespace Picross.ui.parts
             paletteZeroSquareObject.Hide();
             paletteBSSquareObject.Hide();
             paletteCRSquareObject.Hide();
+            paletteENSquareObject.Hide();
             _texture.Texture = null;
+            _valueText.Text = "";
             _isShow = false;
         }
 
@@ -134,34 +151,70 @@ namespace Picross.ui.parts
             paletteZeroSquareObject.UpdateTexture(pos);
             paletteBSSquareObject.UpdateTexture(pos);
             paletteCRSquareObject.UpdateTexture(pos);
+            paletteENSquareObject.UpdateTexture(pos);
         }
 
-        public string GetClickValue(asd.Vector2DF pos)
+        public void OnClick(asd.Vector2DF pos)
         {
-            for (int row = 0; row < 3; row++)
+            if (paletteZeroSquareObject.IsClick(pos))
             {
-                for (int col = 0; col < 3; col++)
+                if(_valueText.Text != "" && _valueText.Text != "0")
                 {
-                    if (paletteSquareObjects[row, col].IsClick(pos) == true)
+                    if (_valueText.Text.Length < 2)
                     {
-                        return paletteSquareObjects[row, col].GetValue();
+                        _valueText.Text += "0";
                     }
                 }
             }
-            if (paletteZeroSquareObject.IsClick(pos))
+            else if (paletteBSSquareObject.IsClick(pos))
             {
-                return CODE.ZERO;
+                if(_valueText.Text.Length > 0)
+                {
+                    _valueText.Text = _valueText.Text.Remove(_valueText.Text.Length - 1);
+                }
             }
-            if (paletteBSSquareObject.IsClick(pos))
+            else if (paletteCRSquareObject.IsClick(pos))
             {
-                return CODE.BS;
+                _valueText.Text = "";
             }
-            if (paletteCRSquareObject.IsClick(pos))
+            else if (paletteENSquareObject.IsClick(pos))
             {
-                return CODE.CLR;
+                value = _valueText.Text;
+                _isClickEnter = true;
             }
+            else
+            {
+                for (int row = 0; row < 3; row++)
+                {
+                    for (int col = 0; col < 3; col++)
+                    {
+                        if (paletteSquareObjects[row, col].IsClick(pos) == true)
+                        {
+                            if(_valueText.Text.Length < 2)
+                            {
+                                if(_valueText.Text == "0")
+                                {
+                                    _valueText.Text = paletteSquareObjects[row, col].GetValue();
+                                }
+                                else
+                                {
+                                    _valueText.Text += paletteSquareObjects[row, col].GetValue();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
-            return string.Empty;
+        public bool IsClickEnter()
+        {
+            return _isClickEnter;
+        }
+
+        public string GetValue()
+        {
+            return value;
         }
     }
 }

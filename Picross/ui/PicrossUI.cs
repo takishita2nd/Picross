@@ -248,7 +248,7 @@ namespace Picross.ui
                                         selectedNumberSquare = s;
                                         selectedRowIndex = rowIndex;
                                         selectedColIndex = colIndex;
-                                        palette.Show(pos);
+                                        palette.Show(pos, selectedNumberSquare.GetValue().ToString());
                                     }
                                     colIndex--;
                                 }
@@ -265,7 +265,7 @@ namespace Picross.ui
                                         selectedNumberSquare = s;
                                         selectedRowIndex = rowIndex;
                                         selectedColIndex = colIndex;
-                                        palette.Show(pos);
+                                        palette.Show(pos, selectedNumberSquare.GetValue().ToString());
                                     }
                                     rowIndex--;
                                 }
@@ -283,69 +283,74 @@ namespace Picross.ui
                         {
                             if (palette.IsClick(pos))
                             {
-                                string v = palette.GetClickValue(pos);
-                                updateTextValue(selectedNumberSquare, v);
+                                string value = string.Empty;
+                                palette.OnClick(pos);
+                                if(palette.IsClickEnter())
+                                {
+                                    palette.Hide();
+                                    if (selectedNumberSquare != null)
+                                    {
+                                        selectedNumberSquare.SetValue(palette.GetValue());
+                                        if (selectedNumberSquare.GetStringValue() != string.Empty)
+                                        {
+                                            if (selectedRowIndex >= 0)
+                                            {
+                                                if (Math.Abs(selectedColIndex - 1) > rowNumberSquare[selectedRowIndex].Count)
+                                                {
+                                                    var square = new NumberSquare(selectedRowIndex, selectedColIndex - 1);
+                                                    asd.Engine.AddObject2D(square.getBackTexture());
+                                                    asd.Engine.AddObject2D(square.getTextObject());
+                                                    rowNumberSquare[selectedRowIndex].Add(square);
+                                                }
+                                            }
+                                            else if (selectedColIndex >= 0)
+                                            {
+                                                if (Math.Abs(selectedRowIndex - 1) > colNumberSquare[selectedColIndex].Count)
+                                                {
+                                                    var square = new NumberSquare(selectedRowIndex - 1, selectedColIndex);
+                                                    asd.Engine.AddObject2D(square.getBackTexture());
+                                                    asd.Engine.AddObject2D(square.getTextObject());
+                                                    colNumberSquare[selectedColIndex].Add(square);
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (selectedRowIndex >= 0)
+                                            {
+                                                if (Math.Abs(selectedColIndex - 1) <= rowNumberSquare[selectedRowIndex].Count)
+                                                {
+                                                    asd.Engine.RemoveObject2D(rowNumberSquare[selectedRowIndex][Math.Abs(selectedColIndex + 1)].getBackTexture());
+                                                    asd.Engine.RemoveObject2D(rowNumberSquare[selectedRowIndex][Math.Abs(selectedColIndex + 1)].getTextObject());
+                                                    rowNumberSquare[selectedRowIndex].RemoveAt(Math.Abs(selectedColIndex + 1));
+                                                    for (int col = selectedColIndex + 1; Math.Abs(col) < rowNumberSquare[selectedRowIndex].Count; col--)
+                                                    {
+                                                        rowNumberSquare[selectedRowIndex][Math.Abs(col)].SetPosition(selectedRowIndex, col - 1);
+                                                    }
+                                                }
+                                            }
+                                            else if (selectedColIndex >= 0)
+                                            {
+                                                if (Math.Abs(selectedRowIndex - 1) <= colNumberSquare[selectedColIndex].Count)
+                                                {
+                                                    asd.Engine.RemoveObject2D(colNumberSquare[selectedColIndex][Math.Abs(selectedRowIndex + 1)].getBackTexture());
+                                                    asd.Engine.RemoveObject2D(colNumberSquare[selectedColIndex][Math.Abs(selectedRowIndex + 1)].getTextObject());
+                                                    colNumberSquare[selectedColIndex].RemoveAt(Math.Abs(selectedRowIndex + 1));
+                                                    for (int row = selectedRowIndex + 1; Math.Abs(row) < colNumberSquare[selectedColIndex].Count; row--)
+                                                    {
+                                                        colNumberSquare[selectedColIndex][Math.Abs(row)].SetPosition(row - 1, selectedColIndex);
+                                                    }
+                                                }
+                                            }
+                                            selectedNumberSquare.SetValue("0");
+                                        }
+                                        selectedNumberSquare = null;
+                                    }
+                                }
                             }
                             else
                             {
                                 palette.Hide();
-                                if(selectedNumberSquare != null)
-                                {
-                                    if(selectedNumberSquare.GetStringValue() != string.Empty)
-                                    {
-                                        if (selectedRowIndex >= 0)
-                                        {
-                                            if(Math.Abs(selectedColIndex - 1) > rowNumberSquare[selectedRowIndex].Count)
-                                            {
-                                                var square = new NumberSquare(selectedRowIndex, selectedColIndex - 1);
-                                                asd.Engine.AddObject2D(square.getBackTexture());
-                                                asd.Engine.AddObject2D(square.getTextObject());
-                                                rowNumberSquare[selectedRowIndex].Add(square);
-                                            }
-                                        }
-                                        else if (selectedColIndex >= 0)
-                                        {
-                                            if (Math.Abs(selectedRowIndex - 1) > colNumberSquare[selectedColIndex].Count)
-                                            {
-                                                var square = new NumberSquare(selectedRowIndex - 1, selectedColIndex);
-                                                asd.Engine.AddObject2D(square.getBackTexture());
-                                                asd.Engine.AddObject2D(square.getTextObject());
-                                                colNumberSquare[selectedColIndex].Add(square);
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        if (selectedRowIndex >= 0)
-                                        {
-                                            if (Math.Abs(selectedColIndex - 1) <= rowNumberSquare[selectedRowIndex].Count)
-                                            {
-                                                asd.Engine.RemoveObject2D(rowNumberSquare[selectedRowIndex][Math.Abs(selectedColIndex + 1)].getBackTexture());
-                                                asd.Engine.RemoveObject2D(rowNumberSquare[selectedRowIndex][Math.Abs(selectedColIndex + 1)].getTextObject());
-                                                rowNumberSquare[selectedRowIndex].RemoveAt(Math.Abs(selectedColIndex + 1));
-                                                for (int col = selectedColIndex + 1; Math.Abs(col) < rowNumberSquare[selectedRowIndex].Count; col--)
-                                                {
-                                                    rowNumberSquare[selectedRowIndex][Math.Abs(col)].SetPosition(selectedRowIndex, col - 1);
-                                                }
-                                            }
-                                        }
-                                        else if (selectedColIndex >= 0)
-                                        {
-                                            if (Math.Abs(selectedRowIndex - 1) <= colNumberSquare[selectedColIndex].Count)
-                                            {
-                                                asd.Engine.RemoveObject2D(colNumberSquare[selectedColIndex][Math.Abs(selectedRowIndex + 1)].getBackTexture());
-                                                asd.Engine.RemoveObject2D(colNumberSquare[selectedColIndex][Math.Abs(selectedRowIndex + 1)].getTextObject());
-                                                colNumberSquare[selectedColIndex].RemoveAt(Math.Abs(selectedRowIndex + 1));
-                                                for (int row = selectedRowIndex + 1; Math.Abs(row) < colNumberSquare[selectedColIndex].Count; row--)
-                                                {
-                                                    colNumberSquare[selectedColIndex][Math.Abs(row)].SetPosition(row - 1, selectedColIndex);
-                                                }
-                                            }
-                                        }
-                                        selectedNumberSquare.SetValue("0");
-                                    }
-                                    selectedNumberSquare = null;
-                                }
                             }
                         }
                     }
@@ -450,56 +455,6 @@ namespace Picross.ui
             List<NumberSquare> list = new List<NumberSquare>();
             list.Add(square);
             colNumberSquare.Add(list);
-        }
-
-        private string updateTextValue(NumberSquare square, string v)
-        {
-            string value = string.Empty;
-            if(square.GetValue() != 0)
-            {
-                value = square.GetStringValue();
-            }
-            string text = string.Empty;
-            switch (v)
-            {
-                case Palette.CODE.ZERO:
-                    if (value.Length == 0)
-                    {
-                        text = string.Empty;
-                    }
-                    else if (value.Length < 2)
-                    {
-                        text = value + v;
-
-                    }
-                    else
-                    {
-                        text = value;
-                    }
-                    break;
-                case Palette.CODE.BS:
-                    if (value.Length != 0)
-                    {
-                        text = value.Remove(value.Length - 1);
-                    }
-                    break;
-                case Palette.CODE.CLR:
-                    text = string.Empty;
-                    break;
-                default:
-                    if (value.Length < 2)
-                    {
-                        text = value + v;
-                    }
-                    else
-                    {
-                        text = value;
-                    }
-                    break;
-            }
-            square.SetValue(text);
-            return text;
-
         }
     }
 }

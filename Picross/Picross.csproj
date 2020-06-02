@@ -95,6 +95,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource.cs" />
     <Compile Include="ui\NumberSquare.cs" />
+    <Compile Include="ui\parts\EnterSquareObject.cs" />
     <Compile Include="ui\parts\Label.cs" />
     <Compile Include="ui\parts\Palette.cs" />
     <Compile Include="ui\parts\TextBox.cs" />
