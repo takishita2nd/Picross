@@ -69,11 +69,12 @@ namespace Picross.logic
                 pattern8();
                 pattern9();
                 pattern10();
+                pattern11();
                 doMask();
                 checkAnalyze();
             } while (checkPainedCount());
             //int roop = 0;
-            //while (roop < 4)
+            //while (roop < 3)
             //{
             //    pattern2();
             //    pattern3();
@@ -84,6 +85,7 @@ namespace Picross.logic
             //    pattern8();
             //    pattern9();
             //    pattern10();
+            //    pattern11();
             //    doMask();
             //    checkAnalyze();
             //    roop++;
