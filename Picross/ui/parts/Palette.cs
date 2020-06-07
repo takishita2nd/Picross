@@ -10,7 +10,7 @@ namespace Picross.ui.parts
     {
         private asd.Vector2DF palettePosition;
         private const int width = 192;
-        private const int height = 256;
+        private const int height = 318;
         private asd.TextureObject2D _texture;
         private SquareObject[,] paletteSquareObjects = new SquareObject[3, 3];
         private SquareObject paletteZeroSquareObject = new SquareObject(-1, 0, "0");
