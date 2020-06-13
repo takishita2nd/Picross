@@ -18,8 +18,8 @@ namespace Picross.logic
         }
 
         /**
- * Rowに対して解析パターン１を適用
- */
+         * Rowに対して解析パターン１を適用
+         */
         private void pattern1Row()
         {
             int row = 0;

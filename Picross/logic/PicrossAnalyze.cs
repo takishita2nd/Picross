@@ -70,6 +70,7 @@ namespace Picross.logic
                 pattern9();
                 pattern10();
                 pattern11();
+                pattern12();
                 doMask();
                 checkAnalyze();
             } while (checkPainedCount());
@@ -413,6 +414,70 @@ namespace Picross.logic
                     }
                 }
             }
+        }
+
+        private List<List<BitmapData>> getSquareDataListUnMaskedRow(int row)
+        {
+            List<List<BitmapData>> data = new List<List<BitmapData>>();
+            List<BitmapData> dataList = new List<BitmapData>();
+            for (int col = 0; col < colNumbers.Count; col++)
+            {
+                if (_bitmapData[row, col].IsMasked() == false)
+                {
+                    dataList.Add(_bitmapData[row, col]);
+                }
+                else
+                {
+                    if (dataList.Count != 0)
+                    {
+                        data.Add(dataList);
+                        dataList = new List<BitmapData>();
+                    }
+                }
+            }
+            if (dataList.Count != 0)
+            {
+                data.Add(dataList);
+            }
+
+            if (data.Count == 0)
+            {
+                return null;
+            }
+
+            return data;
+        }
+
+        private List<List<BitmapData>> getSquareDataListUnMaskedCol(int col)
+        {
+            List<List<BitmapData>> data = new List<List<BitmapData>>();
+            List<BitmapData> dataList = new List<BitmapData>();
+            for (int row = 0; row < rowNumbers.Count; row++)
+            {
+                if (_bitmapData[row, col].IsMasked() == false)
+                {
+                    dataList.Add(_bitmapData[row, col]);
+                }
+                else
+                {
+                    if (dataList.Count != 0)
+                    {
+                        data.Add(dataList);
+                        dataList = new List<BitmapData>();
+                    }
+                }
+            }
+            if (dataList.Count != 0)
+            {
+                data.Add(dataList);
+            }
+
+            if (data.Count == 0)
+            {
+                return null;
+            }
+
+            return data;
         }
     }
 }

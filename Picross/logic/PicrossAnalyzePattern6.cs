@@ -34,35 +34,12 @@ namespace Picross.logic
 
                 // 塗った場所が端っこならそこを塗る
                 // マスクされていない部分をリスト化して取得する
-                List<List<BitmapData>> data = new List<List<BitmapData>>();
+                var data = getSquareDataListUnMaskedRow(row);
+                if (data == null)
                 {
-                    List<BitmapData> dataList = new List<BitmapData>();
-                    for (int col = 0; col < colNumbers.Count; col++)
-                    {
-                        if (_bitmapData[row, col].IsMasked() == false)
-                        {
-                            dataList.Add(_bitmapData[row, col]);
-                        }
-                        else
-                        {
-                            if (dataList.Count != 0)
-                            {
-                                data.Add(dataList);
-                                dataList = new List<BitmapData>();
-                            }
-                        }
-                    }
-                    if (dataList.Count != 0)
-                    {
-                        data.Add(dataList);
-                    }
-
-                    if (data.Count == 0)
-                    {
-                        row++;
-                        rowlist.AnalyzeDatas.Reverse();
-                        continue;
-                    }
+                    row++;
+                    rowlist.AnalyzeDatas.Reverse();
+                    continue;
                 }
 
                 int rowNumberIndex = 0;
@@ -150,34 +127,12 @@ namespace Picross.logic
 
                 // 塗った場所が端っこならそこを塗る
                 // マスクされていない部分をリスト化して取得する
-                List<List<BitmapData>> data = new List<List<BitmapData>>();
+                var data = getSquareDataListUnMaskedRow(row);
+                if (data == null)
                 {
-                    List<BitmapData> dataList = new List<BitmapData>();
-                    for (int col = 0; col < colNumbers.Count; col++)
-                    {
-                        if (_bitmapData[row, col].IsMasked() == false)
-                        {
-                            dataList.Add(_bitmapData[row, col]);
-                        }
-                        else
-                        {
-                            if (dataList.Count != 0)
-                            {
-                                data.Add(dataList);
-                                dataList = new List<BitmapData>();
-                            }
-                        }
-                    }
-                    if (dataList.Count != 0)
-                    {
-                        data.Add(dataList);
-                    }
-
-                    if (data.Count == 0)
-                    {
-                        row++;
-                        continue;
-                    }
+                    row++;
+                    rowlist.AnalyzeDatas.Reverse();
+                    continue;
                 }
 
                 int rowNumberIndex = 0;
@@ -258,35 +213,12 @@ namespace Picross.logic
 
                 // 塗った場所が端っこならそこを塗る
                 // マスクされていない部分をリスト化して取得する
-                List<List<BitmapData>> data = new List<List<BitmapData>>();
+                var data = getSquareDataListUnMaskedCol(col);
+                if (data == null)
                 {
-                    List<BitmapData> dataList = new List<BitmapData>();
-                    for (int row = 0; row < rowNumbers.Count; row++)
-                    {
-                        if (_bitmapData[row, col].IsMasked() == false)
-                        {
-                            dataList.Add(_bitmapData[row, col]);
-                        }
-                        else
-                        {
-                            if (dataList.Count != 0)
-                            {
-                                data.Add(dataList);
-                                dataList = new List<BitmapData>();
-                            }
-                        }
-                    }
-                    if (dataList.Count != 0)
-                    {
-                        data.Add(dataList);
-                    }
-
-                    if (data.Count == 0)
-                    {
-                        col++;
-                        collist.AnalyzeDatas.Reverse();
-                        continue;
-                    }
+                    col++;
+                    collist.AnalyzeDatas.Reverse();
+                    continue;
                 }
 
                 int colNumberIndex = 0;
@@ -374,34 +306,12 @@ namespace Picross.logic
 
                 // 塗った場所が端っこならそこを塗る
                 // マスクされていない部分をリスト化して取得する
-                List<List<BitmapData>> data = new List<List<BitmapData>>();
+                var data = getSquareDataListUnMaskedCol(col);
+                if (data == null)
                 {
-                    List<BitmapData> dataList = new List<BitmapData>();
-                    for (int row = 0; row < rowNumbers.Count; row++)
-                    {
-                        if (_bitmapData[row, col].IsMasked() == false)
-                        {
-                            dataList.Add(_bitmapData[row, col]);
-                        }
-                        else
-                        {
-                            if (dataList.Count != 0)
-                            {
-                                data.Add(dataList);
-                                dataList = new List<BitmapData>();
-                            }
-                        }
-                    }
-                    if (dataList.Count != 0)
-                    {
-                        data.Add(dataList);
-                    }
-
-                    if (data.Count == 0)
-                    {
-                        col++;
-                        continue;
-                    }
+                    col++;
+                    collist.AnalyzeDatas.Reverse();
+                    continue;
                 }
 
                 int colNumberIndex = 0;
