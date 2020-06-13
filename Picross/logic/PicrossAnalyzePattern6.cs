@@ -80,9 +80,12 @@ namespace Picross.logic
 
                         if (rowlist.AnalyzeDatas.Count > rowNumberIndex + 1)
                         {
-                            if (rowlist.AnalyzeDatas[rowNumberIndex].Value + rowlist.AnalyzeDatas[rowNumberIndex + 1].Value <= dataList.Count)
+                            if(rowlist.AnalyzeDatas[rowNumberIndex + 1].IsAnalyzed() == false)
                             {
-                                break;
+                                if (rowlist.AnalyzeDatas[rowNumberIndex].Value + rowlist.AnalyzeDatas[rowNumberIndex + 1].Value <= dataList.Count)
+                                {
+                                    break;
+                                }
                             }
                         }
 
@@ -259,10 +262,14 @@ namespace Picross.logic
 
                         if (collist.AnalyzeDatas.Count > colNumberIndex + 1)
                         {
-                            if (collist.AnalyzeDatas[colNumberIndex].Value + collist.AnalyzeDatas[colNumberIndex + 1].Value <= dataList.Count)
+                            if (collist.AnalyzeDatas[colNumberIndex + 1].IsAnalyzed() == false)
                             {
-                                break;
+                                if (collist.AnalyzeDatas[colNumberIndex].Value + collist.AnalyzeDatas[colNumberIndex + 1].Value <= dataList.Count)
+                                {
+                                    break;
+                                }
                             }
+
                         }
 
                         // 数字に従ってマスを塗る

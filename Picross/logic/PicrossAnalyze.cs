@@ -75,7 +75,7 @@ namespace Picross.logic
                 checkAnalyze();
             } while (checkPainedCount());
             //int roop = 0;
-            //while (roop < 3)
+            //while (roop < 5)
             //{
             //    pattern2();
             //    pattern3();
@@ -87,6 +87,7 @@ namespace Picross.logic
             //    pattern9();
             //    pattern10();
             //    pattern11();
+            //    pattern12();
             //    doMask();
             //    checkAnalyze();
             //    roop++;
@@ -219,6 +220,7 @@ namespace Picross.logic
                         }
                         else if(painted != 0)
                         {
+                            painted = 0;
                             count++;
                         }
                     }
@@ -281,6 +283,7 @@ namespace Picross.logic
                         }
                         else if (painted != 0)
                         {
+                            painted = 0;
                             count++;
                         }
                     }
@@ -343,6 +346,7 @@ namespace Picross.logic
                         }
                         else if (painted != 0)
                         {
+                            painted = 0;
                             count++;
                         }
                     }
@@ -404,6 +408,7 @@ namespace Picross.logic
                         }
                         else if (painted != 0)
                         {
+                            painted = 0;
                             count++;
                         }
                     }

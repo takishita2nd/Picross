@@ -79,6 +79,7 @@ namespace Picross.logic
                 }
 
                 AnalyzeData targetRowList = null;
+                bool sameflg = false;
                 foreach(var rowdata in rowlist.AnalyzeDatas)
                 {
                     if(targetRowList == null)
@@ -87,12 +88,22 @@ namespace Picross.logic
                     }
                     else if(targetRowList.Value < rowdata.Value)
                     {
+                        sameflg = false;
                         targetRowList = rowdata;
                     }
-
+                    else if(targetRowList.Value == rowdata.Value)
+                    {
+                        sameflg = true;
+                    }
+                }
+                if (sameflg)
+                {
+                    rowlist.AnalyzeDatas.Reverse();
+                    row++;
+                    continue;
                 }
 
-                if(targetDataList.Count == targetRowList.Value)
+                if (targetDataList.Count == targetRowList.Value)
                 {
                     //解析済みにする
                     targetRowList.Analyzed();
@@ -176,6 +187,7 @@ namespace Picross.logic
                 }
 
                 AnalyzeData targetColList = null;
+                bool sameflg = false;
                 foreach (var coldata in collist.AnalyzeDatas)
                 {
                     if (targetColList == null)
@@ -184,9 +196,19 @@ namespace Picross.logic
                     }
                     else if (targetColList.Value < coldata.Value)
                     {
+                        sameflg = false;
                         targetColList = coldata;
                     }
-
+                    else if (targetColList.Value == coldata.Value)
+                    {
+                        sameflg = true;
+                    }
+                }
+                if (sameflg)
+                {
+                    collist.AnalyzeDatas.Reverse();
+                    col++;
+                    continue;
                 }
 
                 if (targetDataList.Count == targetColList.Value)
