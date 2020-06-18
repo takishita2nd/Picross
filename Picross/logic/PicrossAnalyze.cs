@@ -58,24 +58,7 @@ namespace Picross.logic
         public BitmapData[,] Run()
         {
             pattern1();
-            do
-            {
-                pattern2();
-                pattern3();
-                pattern4();
-                pattern5();
-                pattern6();
-                pattern7();
-                pattern8();
-                pattern9();
-                pattern10();
-                pattern11();
-                pattern12();
-                doMask();
-                checkAnalyze();
-            } while (checkPainedCount());
-            //int roop = 0;
-            //while (roop < 5)
+            //do
             //{
             //    pattern2();
             //    pattern3();
@@ -88,10 +71,29 @@ namespace Picross.logic
             //    pattern10();
             //    pattern11();
             //    pattern12();
+            //    pattern13();
             //    doMask();
             //    checkAnalyze();
-            //    roop++;
-            //}
+            //} while (checkPainedCount());
+            int roop = 0;
+            while (roop < 6)
+            {
+                pattern2();
+                pattern3();
+                pattern4();
+                pattern5();
+                pattern6();
+                pattern7();
+                pattern8();
+                pattern9();
+                pattern10();
+                pattern11();
+                pattern12();
+                pattern13();
+                doMask();
+                checkAnalyze();
+                roop++;
+            }
 
             return _bitmapData;
         }
@@ -216,6 +218,9 @@ namespace Picross.logic
                             {
                                 rowList.AnalyzeDatas[rowIndex].Analyzed();
                                 rowList.CheckAnalyze();
+                                rowList.AnalyzeDatas.Reverse();
+                                row++;
+                                break;
                             }
                         }
                         else if(painted != 0)
@@ -279,6 +284,8 @@ namespace Picross.logic
                             {
                                 rowList.AnalyzeDatas[rowIndex].Analyzed();
                                 rowList.CheckAnalyze();
+                                row++;
+                                break;
                             }
                         }
                         else if (painted != 0)
@@ -342,6 +349,9 @@ namespace Picross.logic
                             {
                                 colList.AnalyzeDatas[colIndex].Analyzed();
                                 colList.CheckAnalyze();
+                                colList.AnalyzeDatas.Reverse();
+                                col++;
+                                break;
                             }
                         }
                         else if (painted != 0)
@@ -404,6 +414,8 @@ namespace Picross.logic
                             {
                                 colList.AnalyzeDatas[colIndex].Analyzed();
                                 colList.CheckAnalyze();
+                                col++;
+                                break;
                             }
                         }
                         else if (painted != 0)
