@@ -32,12 +32,35 @@ namespace Picross.logic
                 }
 
                 // 有効な数字で一番大きいものを取り出す
-                if(rowlist.AnalyzeDatas.Count != 1)
+                AnalyzeData aData = null;
+                int count = 0;
+                foreach(var v in rowlist.AnalyzeDatas)
+                {
+                    if(v.IsAnalyzed() == true)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        aData = v;
+                        count++;
+                    }
+                    if(count > 1)
+                    {
+                        break;
+                    }
+                }
+                if(count > 1)
                 {
                     row++;
                     continue;
                 }
-                int value = rowlist.AnalyzeDatas[0].Value;
+                if(aData == null)
+                {
+                    row++;
+                    continue;
+                }
+                int value = aData.Value;
 
                 // 対象となるマスを抽出する
                 List<List<BitmapData>> bitmapLists = extractTargetBitmapListsCol(row);
@@ -104,12 +127,35 @@ namespace Picross.logic
                 }
 
                 // 有効な数字で一番大きいものを取り出す
-                if (collist.AnalyzeDatas.Count != 1)
+                AnalyzeData aData = null;
+                int count = 0;
+                foreach (var v in collist.AnalyzeDatas)
+                {
+                    if (v.IsAnalyzed() == true)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        aData = v;
+                        count++;
+                    }
+                    if (count > 1)
+                    {
+                        break;
+                    }
+                }
+                if (count > 1)
                 {
                     col++;
                     continue;
                 }
-                int value = collist.AnalyzeDatas[0].Value;
+                if (aData == null)
+                {
+                    col++;
+                    continue;
+                }
+                int value = aData.Value;
 
                 // 対象となるマスを抽出する
                 List<List<BitmapData>> bitmapLists = extractTargetBitmapListsRow(col);
