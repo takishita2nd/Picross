@@ -103,6 +103,9 @@ namespace Picross.logic
             }
         }
 
+        /**
+         * 対象となるマスのリストを取得する(ROW)
+         */
         private List<List<BitmapData>> extractTargetBitmapListsCol(int row)
         {
             List<List<BitmapData>> bitmapLists = new List<List<BitmapData>>();
@@ -134,12 +137,27 @@ namespace Picross.logic
             }
             if (bitmaplist.Count != 0)
             {
-                bitmapLists.Add(bitmaplist);
+                // 終端がマスクに挟まれていたら
+                for (int col = colNumbers.Count - 1; col > 0; col--)
+                {
+                    if (_bitmapData[row, col].IsMasked())
+                    {
+                        break;
+                    }
+                    else if (_bitmapData[row, col].IsValid() == false)
+                    {
+                        bitmapLists.Add(bitmaplist);
+                        break;
+                    }
+                }
             }
 
             return bitmapLists;
         }
 
+        /**
+         * 対象となるマスのリストを取得する(COL)
+         */
         private List<List<BitmapData>> extractTargetBitmapListsRow(int col)
         {
             List<List<BitmapData>> bitmapLists = new List<List<BitmapData>>();
@@ -171,12 +189,27 @@ namespace Picross.logic
             }
             if (bitmaplist.Count != 0)
             {
-                bitmapLists.Add(bitmaplist);
+                // 終端がマスクに挟まれていたら
+                for(int row = rowNumbers.Count - 1; row > 0; row--)
+                {
+                    if(_bitmapData[row, col].IsMasked())
+                    {
+                        break;
+                    }
+                    else if(_bitmapData[row, col].IsValid() == false)
+                    {
+                        bitmapLists.Add(bitmaplist);
+                        break;
+                    }
+                }
             }
 
             return bitmapLists;
         }
 
+        /**
+         * 中央の塗れるマスを塗る
+         */
         private void paintCenter(int value, ref List<BitmapData> bitmaps)
         {
             if (value < bitmaps.Count && value * 2 > bitmaps.Count)
