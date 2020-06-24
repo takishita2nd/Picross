@@ -55,8 +55,11 @@ namespace Picross.logic
                 {
                     if(bitmap.IsPainted())
                     {
-                        leftCol = bitmap.Col;
-                        painted = true;
+                        if(painted == false)
+                        {
+                            leftCol = bitmap.Col;
+                            painted = true;
+                        }
                     }
                     else
                     {
@@ -124,8 +127,11 @@ namespace Picross.logic
                 {
                     if (bitmap.IsPainted())
                     {
-                        topRow = bitmap.Row;
-                        painted = true;
+                        if (painted == false)
+                        {
+                            topRow = bitmap.Row;
+                            painted = true;
+                        }
                     }
                     else
                     {
