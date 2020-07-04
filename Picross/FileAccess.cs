@@ -1,7 +1,9 @@
 ﻿using Newtonsoft.Json;
+using Picross.logic;
 using Picross.ui;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -130,6 +132,34 @@ namespace Picross
                     }
                     colList.Add(list);
                     col++;
+                }
+            }
+        }
+
+        private const string _outputfile = "output.dat";
+        public static void Output(BitmapData[,] bitmapDatas, int row, int col)
+        {
+            if (File.Exists(_outputfile) == true)
+            {
+                File.Delete(_outputfile);
+            }
+
+            using (var stream = new StreamWriter(_outputfile, true))
+            {
+                for(int r = 0; r < row; r++)
+                {
+                    for(int c = 0; c < col; c++)
+                    {
+                        if(bitmapDatas[r, c].IsPainted())
+                        {
+                            stream.Write(1);
+                        }
+                        else
+                        {
+                            stream.Write(0);
+                        }
+                    }
+                    stream.Write("\r\n");
                 }
             }
         }

@@ -102,6 +102,8 @@ namespace Picross.logic
             //    roop++;
             //}
 
+            FileAccess.Output(_bitmapData, rowNumbers.Count, colNumbers.Count);
+
             return _bitmapData;
         }
 
