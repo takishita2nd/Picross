@@ -136,6 +136,52 @@ namespace Picross
             }
         }
 
+        public static void Load(string filename, ref List<List<NumberSquare>> rowList, ref List<List<NumberSquare>> colList)
+        {
+            string str = string.Empty;
+            using (var stream = new StreamReader(filename, true))
+            {
+                str = stream.ReadToEnd();
+            }
+            var data = JsonConvert.DeserializeObject<Data>(str);
+            rowList = new List<List<NumberSquare>>();
+            {
+                int row = 0;
+                foreach (var r in data.RowData)
+                {
+                    List<NumberSquare> list = new List<NumberSquare>();
+                    int col = -1;
+                    foreach (var v in r)
+                    {
+                        var s = new NumberSquare(row, col);
+                        s.SetValue(v.ToString());
+                        list.Add(s);
+                        col--;
+                    }
+                    rowList.Add(list);
+                    row++;
+                }
+            }
+            colList = new List<List<NumberSquare>>();
+            {
+                int col = 0;
+                foreach (var c in data.ColData)
+                {
+                    List<NumberSquare> list = new List<NumberSquare>();
+                    int row = -1;
+                    foreach (var v in c)
+                    {
+                        var s = new NumberSquare(row, col);
+                        s.SetValue(v.ToString());
+                        list.Add(s);
+                        row--;
+                    }
+                    colList.Add(list);
+                    col++;
+                }
+            }
+        }
+
         private const string _outputfile = "output.dat";
         public static void Output(BitmapData[,] bitmapDatas, int row, int col)
         {
@@ -162,6 +208,16 @@ namespace Picross
                     stream.Write("\r\n");
                 }
             }
+        }
+
+        public static string AnswerLoad(string filename)
+        {
+            string str = string.Empty;
+            using (var stream = new StreamReader(filename, true))
+            {
+                str = stream.ReadToEnd();
+            }
+            return str;
         }
     }
 }

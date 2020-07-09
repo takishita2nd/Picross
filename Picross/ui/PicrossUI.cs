@@ -144,6 +144,7 @@ namespace Picross.ui
                         }
                     }
                 }
+                FileAccess.Output(ret, rowNumberSquare.Count, colNumberSquare.Count);
             });
 
             // セーブボタン
@@ -191,6 +192,18 @@ namespace Picross.ui
                     }
 
                 }
+            });
+
+            // テストボタン
+            var testButton = new Button(10, 170, "テスト");
+            testButton.Show();
+            asd.Engine.AddObject2D(testButton.getBackTexture());
+            asd.Engine.AddObject2D(testButton.getTextObject());
+            buttons.Add(testButton);
+            testButton.SetAction(() =>
+            {
+                var test = new AutoTest();
+                test.Run();
             });
 
             while (asd.Engine.DoEvents())

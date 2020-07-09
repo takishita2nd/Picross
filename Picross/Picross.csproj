@@ -75,6 +75,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoTest.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="FileAccess.cs" />
     <Compile Include="logic\AnalyzeData.cs" />
