@@ -11,7 +11,7 @@ namespace Picross.logic
     partial class PicrossAnalyze
     {
         // 解析パターンその１０
-        // 中央の塗った場所から、塗れない場所をマスクする（数字が２個の場合）
+        // 数字が2個ある場合、小さい方の数字+1を除いた空きマスの中央を塗る
         private void pattern10()
         {
             // Row
